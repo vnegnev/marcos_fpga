@@ -70,9 +70,9 @@ cell xilinx.com:ip:dds_compiler:6.0 tx0_nco {
     Noise_Shaping Taylor_Series_Corrected
     PHASE_WIDTH 24
     OUTPUT_WIDTH 16
-    Memory_Type = Auto
-    Has_Phase_Out = false
-    Latency = 6
+    Memory_Type Auto
+    Has_Phase_Out false
+    Latency 6
     DSP48_USE Minimal
     NEGATIVE_SINE true
 } {
@@ -83,9 +83,9 @@ cell xilinx.com:ip:dds_compiler:6.0 tx1_nco {
     Noise_Shaping Taylor_Series_Corrected
     PHASE_WIDTH 24
     OUTPUT_WIDTH 16
-    Memory_Type = Auto
-    Has_Phase_Out = false
-    Latency = 6
+    Memory_Type Auto
+    Has_Phase_Out false
+    Latency 6
     DSP48_USE Minimal
     NEGATIVE_SINE true
 } {
@@ -96,9 +96,9 @@ cell xilinx.com:ip:dds_compiler:6.0 tx2_nco {
     Noise_Shaping Taylor_Series_Corrected
     PHASE_WIDTH 24
     OUTPUT_WIDTH 16
-    Memory_Type = Auto
-    Has_Phase_Out = false
-    Latency = 6
+    Memory_Type Auto
+    Has_Phase_Out false
+    Latency 6
     DSP48_USE Minimal
     NEGATIVE_SINE true
 } {
