@@ -8,7 +8,9 @@ cell open-mri:user:complex_multiplier:1.0 mult_0 {
   STAGES 3
   TRUNCATE 1
 } {
-  aclk /pll_0/clk_out1
+    S_AXIS_A /flocra/TX0_AXIS
+    aclk /pll_0/clk_out1
+	aresetn /rst_0/peripheral_aresetn  
 }
 
 cell open-mri:user:complex_multiplier:1.0 mult_1 {
@@ -19,8 +21,9 @@ cell open-mri:user:complex_multiplier:1.0 mult_1 {
   STAGES 3
   TRUNCATE 1
 } {
+    S_AXIS_A /flocra/TX1_AXIS
 	aclk /pll_0/clk_out1
-	aresetn rst_0/peripheral_aresetn
+	aresetn /rst_0/peripheral_aresetn
 }
 
 # extract the real component of the product using a broadcaster in to I and Q
@@ -34,7 +37,7 @@ cell xilinx.com:ip:axis_subset_converter:1.1 real_0 {
 } {
     S_AXIS mult_0/M_AXIS_DOUT
 	aclk /pll_0/clk_out1
-	aresetn rst_0/peripheral_aresetn	
+	aresetn /rst_0/peripheral_aresetn	
 }
 
 cell xilinx.com:ip:axis_subset_converter:1.1 real_1 {
@@ -46,7 +49,7 @@ cell xilinx.com:ip:axis_subset_converter:1.1 real_1 {
 } {
     S_AXIS mult_1/M_AXIS_DOUT
 	aclk /pll_0/clk_out1	
-	aresetn rst_0/peripheral_aresetn		
+	aresetn /rst_0/peripheral_aresetn		
 }
 
 
@@ -57,7 +60,7 @@ cell xilinx.com:ip:axis_combiner:1.1 axis_combiner_0 {
     S00_AXIS real_0/M_AXIS
     S01_AXIS real_1/M_AXIS
 	aclk /pll_0/clk_out1	
-	aresetn rst_0/peripheral_aresetn		
+	aresetn /rst_0/peripheral_aresetn		
 }
 
 cell xilinx.com:ip:axis_subset_converter:1.1 dac_truncator {
@@ -67,9 +70,10 @@ cell xilinx.com:ip:axis_subset_converter:1.1 dac_truncator {
     M_TDATA_NUM_BYTES 4
     TDATA_REMAP {2'b00, tdata[30:17], 2'b00, tdata[14:1]}
 } {
+    M_AXIS /dac_0/S_AXIS
     S_AXIS axis_combiner_0/M_AXIS
 	aclk /pll_0/clk_out1	
-	aresetn rst_0/peripheral_aresetn		
+	aresetn /rst_0/peripheral_aresetn		
 }
 
 
@@ -81,11 +85,11 @@ cell xilinx.com:ip:dds_compiler:6.0 tx0_nco {
     OUTPUT_WIDTH 16
     Memory_Type Auto
     Has_Phase_Out false
-    Latency 6
     DSP48_USE Minimal
     NEGATIVE_SINE true
 } {
-  aclk /pll_0/clk_out1
+    aclk /pll_0/clk_out1
+    S_AXIS_PHASE /flocra/DDS0_PHASE_AXIS
 }
 
 cell xilinx.com:ip:dds_compiler:6.0 tx1_nco {
@@ -95,11 +99,11 @@ cell xilinx.com:ip:dds_compiler:6.0 tx1_nco {
     OUTPUT_WIDTH 16
     Memory_Type Auto
     Has_Phase_Out false
-    Latency 6
     DSP48_USE Minimal
     NEGATIVE_SINE true
 } {
-  aclk /pll_0/clk_out1
+    aclk /pll_0/clk_out1
+    S_AXIS_PHASE /flocra/DDS1_PHASE_AXIS
 }
 
 cell xilinx.com:ip:dds_compiler:6.0 tx2_nco {
@@ -109,11 +113,11 @@ cell xilinx.com:ip:dds_compiler:6.0 tx2_nco {
     OUTPUT_WIDTH 16
     Memory_Type Auto
     Has_Phase_Out false
-    Latency 6
     DSP48_USE Minimal
     NEGATIVE_SINE true
 } {
-  aclk /pll_0/clk_out1
+    aclk /pll_0/clk_out1
+    S_AXIS_PHASE /flocra/DDS2_PHASE_AXIS
 }
 
 cell xilinx.com:ip:axis_broadcaster:1.1 bcast_nco0 {
@@ -126,10 +130,10 @@ cell xilinx.com:ip:axis_broadcaster:1.1 bcast_nco0 {
   M01_TDATA_REMAP {tdata[23:0]}
   HAS_TREADY 0
 } {
+    M00_AXIS mult_0/S_AXIS_B
     S_AXIS tx0_nco/M_AXIS_DATA
-    M_00_AXIS mult_0/S_AXIS_B
 	aclk /pll_0/clk_out1	
-	aresetn rst_0/peripheral_aresetn		
+	aresetn /rst_0/peripheral_aresetn		
 }
 
 cell xilinx.com:ip:axis_broadcaster:1.1 bcast_nco1 {
@@ -142,9 +146,9 @@ cell xilinx.com:ip:axis_broadcaster:1.1 bcast_nco1 {
   M01_TDATA_REMAP {tdata[23:0]}
   HAS_TREADY 0
 } {
+    M00_AXIS mult_1/S_AXIS_B
     S_AXIS tx1_nco/M_AXIS_DATA
-    M_00_AXIS mult_1/S_AXIS_B    
 	aclk /pll_0/clk_out1
-	aresetn rst_0/peripheral_aresetn		
+	aresetn /rst_0/peripheral_aresetn		
 }
 

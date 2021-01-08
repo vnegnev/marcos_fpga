@@ -1,4 +1,8 @@
 global adc_clk_freq
+create_bd_intf_pin -mode Slave -vlnv xilinx.com:interface:axis_rtl:1.0 S_AXIS_ADC
+create_bd_intf_pin -mode Slave -vlnv xilinx.com:interface:axis_rtl:1.0 S_AXIS_DDS_IQ
+create_bd_intf_pin -mode Slave -vlnv xilinx.com:interface:axis_rtl:1.0 S_AXIS_RX_RATE
+create_bd_pin -dir I rx_aresetn
 
 cell open-mri:user:complex_multiplier:1.0 mult_0 {
   OPERAND_WIDTH_A 16
@@ -8,8 +12,10 @@ cell open-mri:user:complex_multiplier:1.0 mult_0 {
   STAGES 3
   TRUNCATE 1  
 } {
+    S_AXIS_A S_AXIS_ADC
+    S_AXIS_B S_AXIS_DDS_IQ
 	aclk /pll_0/clk_out1  
-	aresetn rst_0/peripheral_aresetn	
+	aresetn rx_aresetn
 }
 
 # Create axis_broadcaster
@@ -24,7 +30,7 @@ cell xilinx.com:ip:axis_broadcaster:1.1 comb2iq {
 } {
 	S_AXIS mult_0/M_AXIS_DOUT
 	aclk /pll_0/clk_out1  
-	aresetn rst_0/peripheral_aresetn	
+	aresetn rx_aresetn
 }
 
 cell xilinx.com:ip:axis_broadcaster:1.1 rate {
@@ -36,8 +42,9 @@ cell xilinx.com:ip:axis_broadcaster:1.1 rate {
   M01_TDATA_REMAP {tdata[15:0]}
   HAS_TREADY 0
 } {
+    S_AXIS S_AXIS_RX_RATE
 	aclk /pll_0/clk_out1
-	aresetn rst_0/peripheral_aresetn	
+	aresetn rx_aresetn	
 }
 
 # Create cic_compiler
@@ -46,22 +53,22 @@ cell xilinx.com:ip:cic_compiler:4.0 cic_real {
   FILTER_TYPE Decimation
   NUMBER_OF_STAGES 6
   SAMPLE_RATE_CHANGES Programmable
-  MINIMUM_RATE 25
-  MAXIMUM_RATE 8192
-  FIXED_OR_INITIAL_RATE 625
-  INPUT_SAMPLE_FREQUENCY $adc_clk_freq
-  CLOCK_FREQUENCY $adc_clk_freq
+  MINIMUM_RATE 4
+  MAXIMUM_RATE 4095
+  FIXED_OR_INITIAL_RATE 512
+  RATESPECIFICATION Sample_Period
+  SAMPLEPERIOD 1
   INPUT_DATA_WIDTH 32
   QUANTIZATION Truncation
   OUTPUT_DATA_WIDTH 32
-  USE_XTREME_DSP_SLICE false
+  USE_XTREME_DSP_SLICE true
   HAS_DOUT_TREADY false
   HAS_ARESETN true
 } {
 	S_AXIS_DATA comb2iq/M00_AXIS
 	S_AXIS_CONFIG rate/M00_AXIS
 	aclk /pll_0/clk_out1  
-	aresetn rst_0/peripheral_aresetn	
+	aresetn rx_aresetn	
 }
 
 # Create cic_compiler
@@ -70,22 +77,22 @@ cell xilinx.com:ip:cic_compiler:4.0 cic_imag {
   FILTER_TYPE Decimation
   NUMBER_OF_STAGES 6
   SAMPLE_RATE_CHANGES Programmable
-  MINIMUM_RATE 25
-  MAXIMUM_RATE 8192
-  FIXED_OR_INITIAL_RATE 625
-  INPUT_SAMPLE_FREQUENCY $adc_clk_freq
-  CLOCK_FREQUENCY $adc_clk_freq
+  MINIMUM_RATE 4
+  MAXIMUM_RATE 4095
+  FIXED_OR_INITIAL_RATE 512
+  RATESPECIFICATION Sample_Period
+  SAMPLEPERIOD 1
   INPUT_DATA_WIDTH 32
   QUANTIZATION Truncation
   OUTPUT_DATA_WIDTH 32
-  USE_XTREME_DSP_SLICE false
+  USE_XTREME_DSP_SLICE true
   HAS_DOUT_TREADY false
   HAS_ARESETN true
 } {
 	S_AXIS_DATA comb2iq/M01_AXIS
 	S_AXIS_CONFIG rate/M01_AXIS
 	aclk /pll_0/clk_out1
-	aresetn rst_0/peripheral_aresetn  
+	aresetn rx_aresetn 
 }
 
 cell xilinx.com:ip:axis_combiner:1.1 comb_iqmerge {
@@ -95,7 +102,7 @@ cell xilinx.com:ip:axis_combiner:1.1 comb_iqmerge {
     S00_AXIS cic_real/M_AXIS_DATA
     S01_AXIS cic_imag/M_AXIS_DATA
     aclk /pll_0/clk_out1
-	aresetn rst_0/peripheral_aresetn	
+	aresetn rx_aresetn
 }
 
 
