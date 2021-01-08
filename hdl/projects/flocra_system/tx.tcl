@@ -8,7 +8,7 @@ cell open-mri:user:complex_multiplier:1.0 mult_0 {
   STAGES 3
   TRUNCATE 1
 } {
-
+  aclk /pll_0/clk_out1
 }
 
 cell open-mri:user:complex_multiplier:1.0 mult_1 {
@@ -19,7 +19,8 @@ cell open-mri:user:complex_multiplier:1.0 mult_1 {
   STAGES 3
   TRUNCATE 1
 } {
-
+	aclk /pll_0/clk_out1
+	aresetn rst_0/peripheral_aresetn
 }
 
 # extract the real component of the product using a broadcaster in to I and Q
@@ -32,6 +33,8 @@ cell xilinx.com:ip:axis_subset_converter:1.1 real_0 {
     TDATA_REMAP {tdata[15:0]}
 } {
     S_AXIS mult_0/M_AXIS_DOUT
+	aclk /pll_0/clk_out1
+	aresetn rst_0/peripheral_aresetn	
 }
 
 cell xilinx.com:ip:axis_subset_converter:1.1 real_1 {
@@ -42,6 +45,8 @@ cell xilinx.com:ip:axis_subset_converter:1.1 real_1 {
     TDATA_REMAP {tdata[15:0]}
 } {
     S_AXIS mult_1/M_AXIS_DOUT
+	aclk /pll_0/clk_out1	
+	aresetn rst_0/peripheral_aresetn		
 }
 
 
@@ -51,6 +56,8 @@ cell xilinx.com:ip:axis_combiner:1.1 axis_combiner_0 {
 } {
     S00_AXIS real_0/M_AXIS
     S01_AXIS real_1/M_AXIS
+	aclk /pll_0/clk_out1	
+	aresetn rst_0/peripheral_aresetn		
 }
 
 cell xilinx.com:ip:axis_subset_converter:1.1 dac_truncator {
@@ -61,6 +68,8 @@ cell xilinx.com:ip:axis_subset_converter:1.1 dac_truncator {
     TDATA_REMAP {2'b00, tdata[30:17], 2'b00, tdata[14:1]}
 } {
     S_AXIS axis_combiner_0/M_AXIS
+	aclk /pll_0/clk_out1	
+	aresetn rst_0/peripheral_aresetn		
 }
 
 
@@ -76,6 +85,7 @@ cell xilinx.com:ip:dds_compiler:6.0 tx0_nco {
     DSP48_USE Minimal
     NEGATIVE_SINE true
 } {
+  aclk /pll_0/clk_out1
 }
 
 cell xilinx.com:ip:dds_compiler:6.0 tx1_nco {
@@ -89,6 +99,7 @@ cell xilinx.com:ip:dds_compiler:6.0 tx1_nco {
     DSP48_USE Minimal
     NEGATIVE_SINE true
 } {
+  aclk /pll_0/clk_out1
 }
 
 cell xilinx.com:ip:dds_compiler:6.0 tx2_nco {
@@ -102,6 +113,7 @@ cell xilinx.com:ip:dds_compiler:6.0 tx2_nco {
     DSP48_USE Minimal
     NEGATIVE_SINE true
 } {
+  aclk /pll_0/clk_out1
 }
 
 cell xilinx.com:ip:axis_broadcaster:1.1 bcast_nco0 {
@@ -116,6 +128,8 @@ cell xilinx.com:ip:axis_broadcaster:1.1 bcast_nco0 {
 } {
     S_AXIS tx0_nco/M_AXIS_DATA
     M_00_AXIS mult_0/S_AXIS_B
+	aclk /pll_0/clk_out1	
+	aresetn rst_0/peripheral_aresetn		
 }
 
 cell xilinx.com:ip:axis_broadcaster:1.1 bcast_nco1 {
@@ -130,5 +144,7 @@ cell xilinx.com:ip:axis_broadcaster:1.1 bcast_nco1 {
 } {
     S_AXIS tx1_nco/M_AXIS_DATA
     M_00_AXIS mult_1/S_AXIS_B    
+	aclk /pll_0/clk_out1
+	aresetn rst_0/peripheral_aresetn		
 }
 
