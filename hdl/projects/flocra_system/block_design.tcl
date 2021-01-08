@@ -102,12 +102,6 @@ cell pavel-demin:user:axi_cfg_register cfg_0 {
   AXI_DATA_WIDTH 32
 }
 
-# Create xlslice
-cell xilinx.com:ip:xlslice:1.0 txinterpolator_slice_0 {
-  DIN_WIDTH 128 DIN_FROM 31 DIN_TO 0 DOUT_WIDTH 32
-} {
-  Din cfg_0/cfg_data
-}
 
 # Create xlslice
 #cell xilinx.com:ip:xlslice:1.0 rst_slice_1 {
@@ -143,45 +137,22 @@ cell xilinx.com:ip:blk_mem_gen:8.4 sequence_memory {
 }
 
 
-# Create microsequencer
-cell open-mri:user:micro_sequencer:1.0 micro_sequencer {
-  C_S_AXI_DATA_WIDTH 32
-  C_S_AXI_ADDR_WIDTH 32
-  BRAM_DATA_WIDTH 64
-  BRAM_ADDR_WIDTH 13
-} {
-  BRAM_PORTA sequence_memory/BRAM_PORTB
-}
-
-
-# Removed these connections from rx:
-# slice_0/Din
-# rst_slice_0/Dout
 module rx_0 {
-  source projects/ocra_mri/rx.tcl
+  source projects/flocra_system/rx.tcl
 } {
-  rate_slice/Din cfg_slice_0/Dout
-  mult_0/S_AXIS_A adc_0/M_AXIS
-  mult_0/aclk pll_0/clk_out1
 }
 
-#  axis_interpolator_0/cfg_data txinterpolator_slice_0/Dout  
+module rx_1 {
+  source projects/flocra_system/rx.tcl
+} {
+}
+
 module tx_0 {
-  source projects/ocra_mri/tx.tcl
+  source projects/flocra_system/tx.tcl
 } {
-  slice_1/Din cfg_slice_1/Dout
-  axis_interpolator_0/cfg_data txinterpolator_slice_0/Dout
-  real_0/M_AXIS dac_0/S_AXIS
 }
 
-module nco_0 {
-    source projects/ocra_mri/nco.tcl
-} {
-  slice_1/Din cfg_slice_0/Dout
-  bcast_nco/M00_AXIS rx_0/mult_0/S_AXIS_B
-  bcast_nco/M01_AXIS tx_0/mult_0/S_AXIS_B
-  dds_nco/aresetn micro_sequencer/hf_reset
-}
+
 
 # Create axi_sts_register
 cell pavel-demin:user:axi_sts_register:1.0 sts_0 {
@@ -253,13 +224,13 @@ set_property OFFSET 0x40030000 [get_bd_addr_segs ps_0/Data/SEG_sequence_writer_r
 
 
 # Create all required interconnections
-apply_bd_automation -rule xilinx.com:bd_rule:axi4 -config {
-  Master /ps_0/M_AXI_GP0
-  Clk Auto
-} [get_bd_intf_pins micro_sequencer/S_AXI]
+# apply_bd_automation -rule xilinx.com:bd_rule:axi4 -config {
+  # Master /ps_0/M_AXI_GP0
+  # Clk Auto
+# } [get_bd_intf_pins micro_sequencer/S_AXI]
 
-set_property RANGE 64K [get_bd_addr_segs ps_0/Data/SEG_micro_sequencer_reg0]
-set_property OFFSET 0x40040000 [get_bd_addr_segs ps_0/Data/SEG_micro_sequencer_reg0]
+# set_property RANGE 64K [get_bd_addr_segs ps_0/Data/SEG_micro_sequencer_reg0]
+# set_property OFFSET 0x40040000 [get_bd_addr_segs ps_0/Data/SEG_micro_sequencer_reg0]
 
 cell xilinx.com:ip:xlconcat:2.1 pio_concat_0 {
     NUM_PORTS 6
@@ -290,13 +261,13 @@ set_property OFFSET 0x40050000 [get_bd_addr_segs ps_0/Data/SEG_serial_attenuator
 # the LEDs
 create_bd_cell -type ip -vlnv xilinx.com:ip:xlslice:1.0 xled_slice_0
 set_property -dict [list CONFIG.DIN_WIDTH {64} CONFIG.DIN_TO {8} CONFIG.DIN_FROM {15} CONFIG.DOUT_WIDTH {8}] [get_bd_cells xled_slice_0]
-connect_bd_net [get_bd_pins micro_sequencer/pulse] [get_bd_pins xled_slice_0/Din]
+# connect_bd_net [get_bd_pins micro_sequencer/pulse] [get_bd_pins xled_slice_0/Din]
 connect_bd_net [get_bd_ports led_o] [get_bd_pins xled_slice_0/Dout]
 
 # the transmit trigger pulse
 create_bd_cell -type ip -vlnv xilinx.com:ip:xlslice:1.0 trigger_slice_0
 set_property -dict [list CONFIG.DIN_WIDTH {64} CONFIG.DIN_FROM {7} CONFIG.DIN_TO {0} CONFIG.DOUT_WIDTH {8}] [get_bd_cells trigger_slice_0]
-connect_bd_net [get_bd_pins micro_sequencer/pulse] [get_bd_pins trigger_slice_0/Din]
+# connect_bd_net [get_bd_pins micro_sequencer/pulse] [get_bd_pins trigger_slice_0/Din]
 connect_bd_net [get_bd_pins trigger_slice_0/Dout] [get_bd_pins tx_0/slice_0/Din]
 connect_bd_net [get_bd_pins trigger_slice_0/Dout] [get_bd_pins rx_0/slice_0/Din]
 
@@ -309,7 +280,7 @@ connect_bd_net [get_bd_pins grad_bram_enb_slice/Din] [get_bd_pins trigger_slice_
 
 create_bd_cell -type ip -vlnv xilinx.com:ip:xlslice:1.0 grad_bram_offset_slice
 set_property -dict [list CONFIG.DIN_WIDTH {16} CONFIG.DIN_TO {0} CONFIG.DIN_FROM {13} CONFIG.DOUT_WIDTH {14}] [get_bd_cells grad_bram_offset_slice]
-connect_bd_net [get_bd_pins grad_bram_offset_slice/Din] [get_bd_pins micro_sequencer/grad_offset]
+# connect_bd_net [get_bd_pins grad_bram_offset_slice/Din] [get_bd_pins micro_sequencer/grad_offset]
 
 
 cell open-mri:user:flocra_grad_ctrl:1.0 flocra_grad_ctrl {
@@ -349,7 +320,7 @@ cell xilinx.com:ip:xlconcat:2.1 spi_concat_0 {
 
 
 # connect the tx_offset
-connect_bd_net [get_bd_pins micro_sequencer/tx_offset] [get_bd_pins tx_0/reader_0/current_offset]
+# connect_bd_net [get_bd_pins micro_sequencer/tx_offset] [get_bd_pins tx_0/reader_0/current_offset]
 
 # TW add one output register stage
 set_property -dict [list CONFIG.Register_PortB_Output_of_Memory_Primitives {true} CONFIG.Register_PortB_Output_of_Memory_Core {false}] [get_bd_cells sequence_memory]
@@ -375,7 +346,7 @@ create_bd_port -dir O -from 7 -to 0 exp_n_tri_io
 # so its easier to not use it
 create_bd_cell -type ip -vlnv xilinx.com:ip:xlslice:1.0 txgate_slice_0
 set_property -dict [list CONFIG.DIN_WIDTH {64} CONFIG.DIN_FROM {4} CONFIG.DIN_TO {4} CONFIG.DOUT_WIDTH {1}] [get_bd_cells txgate_slice_0]
-connect_bd_net [get_bd_pins micro_sequencer/pulse] [get_bd_pins txgate_slice_0/Din]
+# connect_bd_net [get_bd_pins micro_sequencer/pulse] [get_bd_pins txgate_slice_0/Din]
 
 
 # Concat with the gradient DAC slice
