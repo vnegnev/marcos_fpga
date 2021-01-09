@@ -56,11 +56,11 @@ $(DTREE_DIR): $(DTREE_TAR)
 	mkdir -p $@
 	tar -zxf $< --strip-components=1 --directory=$@
 
-tmp/cores_pavel/%: cores_pavel/%/core_config.tcl cores_pavel/%/*.v
+tmp/cores_pavel/%: cores_pavel/%/core_config.tcl cores_pavel/%/*.v 
 	mkdir -p $(@D)
 	$(VIVADO) -source scripts/core_pavel.tcl -tclargs $* $(PART)
 
-tmp/cores/%: cores/%/core_config.tcl cores/%/*.v
+tmp/cores/%: cores/%/core_config.tcl $(cores/%/*.v)  $(cores_pavel/%/*.sv)
 	mkdir -p $(@D)
 	$(VIVADO) -source scripts/core.tcl -tclargs $* $(PART)
 

@@ -9,7 +9,7 @@ core_parameter C_S0_AXI_DATA_WIDTH {S0 AXI DATA WIDTH} {Width of the AXI data bu
 core_parameter C_S0_AXI_ADDR_WIDTH {S0 AXI ADDR WIDTH} {Width of the AXI address bus.}
 
 #set_property file_type SystemVerilog [glob cores/$core_name/*.v]
-set_property file_type SystemVerilog [get_files *.v]
+set_property file_type SystemVerilog [get_files *.sv]
 
 set bus [ipx::get_bus_interfaces -of_objects $core dds0_phase_axis_o]
 set_property NAME DDS0_PHASE_AXIS $bus
