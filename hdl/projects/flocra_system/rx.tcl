@@ -4,6 +4,18 @@ create_bd_intf_pin -mode Slave -vlnv xilinx.com:interface:axis_rtl:1.0 S_AXIS_DD
 create_bd_intf_pin -mode Slave -vlnv xilinx.com:interface:axis_rtl:1.0 S_AXIS_RX_RATE
 create_bd_pin -dir I rx_aresetn
 
+cell xilinx.com:ip:axis_subset_converter:1.1 real_selector {
+    S_TDATA_NUM_BYTES.VALUE_SRC USER
+    M_TDATA_NUM_BYTES.VALUE_SRC USER
+    S_TDATA_NUM_BYTES 2
+    M_TDATA_NUM_BYTES 4
+    TDATA_REMAP {16'b0, tdata[15:0]}
+} {
+    S_AXIS S_AXIS_ADC
+	aclk /pll_0/clk_out1	
+	aresetn /rst_0/peripheral_aresetn		
+}
+
 cell open-mri:user:complex_multiplier:1.0 mult_0 {
   OPERAND_WIDTH_A 16
   OPERAND_WIDTH_B 16
@@ -12,7 +24,7 @@ cell open-mri:user:complex_multiplier:1.0 mult_0 {
   STAGES 3
   TRUNCATE 1  
 } {
-    S_AXIS_A S_AXIS_ADC
+    S_AXIS_A real_selector/M_AXIS
     S_AXIS_B S_AXIS_DDS_IQ
 	aclk /pll_0/clk_out1  
 	aresetn rx_aresetn
