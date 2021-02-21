@@ -59,10 +59,10 @@ cell xilinx.com:ip:axis_broadcaster:1.1 rate {
 	aresetn rx_aresetn	
 }
 
-cell open-mri:user:CIC:1.0 cic_real_new {
+cell open-mri:user:CIC:1.0 cic_real {
   INP_DW 32
   OUT_DW 32
-  RATE_DW 32
+  RATE_DW 16
   CIC_R 4095
   CIC_N 6
   CIC_M 1
@@ -75,7 +75,6 @@ cell open-mri:user:CIC:1.0 cic_real_new {
 	reset_n rx_aresetn	
 }
 
-# Create cic_compiler
 # cell xilinx.com:ip:cic_compiler:4.0 cic_real {
   # INPUT_DATA_WIDTH.VALUE_SRC USER
   # FILTER_TYPE Decimation
@@ -99,10 +98,10 @@ cell open-mri:user:CIC:1.0 cic_real_new {
 	# aresetn rx_aresetn	
 # }
 
-cell open-mri:user:CIC:1.0 cic_imag_new {
+cell open-mri:user:CIC:1.0 cic_imag {
   INP_DW 32
   OUT_DW 32
-  RATE_DW 32
+  RATE_DW 16
   CIC_R 4095
   CIC_N 6
   CIC_M 1
@@ -115,7 +114,6 @@ cell open-mri:user:CIC:1.0 cic_imag_new {
 	reset_n rx_aresetn	
 }
 
-# Create cic_compiler
 # cell xilinx.com:ip:cic_compiler:4.0 cic_imag {
   # INPUT_DATA_WIDTH.VALUE_SRC USER
   # FILTER_TYPE Decimation
@@ -143,8 +141,8 @@ cell xilinx.com:ip:axis_combiner:1.1 comb_iqmerge {
   NUM_SI 2
   TDATA_NUM_BYTES 4
 } {
-    S00_AXIS cic_real_new/M_AXIS_OUT
-    S01_AXIS cic_imag_new/M_AXIS_OUT
+    S00_AXIS cic_real/M_AXIS_OUT
+    S01_AXIS cic_imag/M_AXIS_OUT
     aclk /pll_0/clk_out1
 	aresetn rx_aresetn
 }
