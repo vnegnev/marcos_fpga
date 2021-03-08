@@ -76,3 +76,6 @@ set_property INTERFACE_MODE slave $bus
 set bus [ipx::get_bus_interfaces s0_axi_aclk]
 set parameter [ipx::get_bus_parameters -of_objects $bus ASSOCIATED_BUSIF]
 set_property VALUE DDS0_PHASE_AXIS:DDS1_PHASE_AXIS:DDS2_PHASE_AXIS:RX0_RATE_AXIS:RX1_RATE_AXIS:RX0_AXIS:RX1_AXIS:DDS0_IQ_AXIS:DDS1_IQ_AXIS:DDS2_IQ_AXIS:RX0_DDS_IQ_AXIS:RX1_DDS_IQ_AXIS:TX0_AXIS:TX1_AXIS:S0_AXI $parameter
+
+# add tie-off to prevent vivado GUI warning
+set_property driver_value 0 [ipx::get_ports trig_i -of_objects [ipx::current_core]]
