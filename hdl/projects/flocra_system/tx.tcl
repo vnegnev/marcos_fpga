@@ -78,33 +78,57 @@ cell xilinx.com:ip:axis_subset_converter:1.1 dac_truncator {
 
 
 # DDS
-cell xilinx.com:ip:dds_compiler:6.0 tx0_nco {
-    PartsPresent SIN_COS_LUT_only
-    Noise_Shaping Taylor_Series_Corrected
-    PHASE_WIDTH 24
-    OUTPUT_WIDTH 16
-    Memory_Type Auto
-    Has_Phase_Out false
-    DSP48_USE Minimal
-    NEGATIVE_SINE true
+cell open-mri:user:DDS:1.0 tx0_nco {
+    PHASE_DW 24
+    OUT_DW 16
+    USE_TAYLOR 1
+    LUT_DW 9
+    SIN_COS 1
 } {
-    aclk /pll_0/clk_out1
+    clk /pll_0/clk_out1
     S_AXIS_PHASE /flocra/DDS0_PHASE_AXIS
+	reset_n /rst_0/peripheral_aresetn	    
 }
 
-cell xilinx.com:ip:dds_compiler:6.0 tx1_nco {
-    PartsPresent SIN_COS_LUT_only
-    Noise_Shaping Taylor_Series_Corrected
-    PHASE_WIDTH 24
-    OUTPUT_WIDTH 16
-    Memory_Type Auto
-    Has_Phase_Out false
-    DSP48_USE Minimal
-    NEGATIVE_SINE true
+# cell xilinx.com:ip:dds_compiler:6.0 tx0_nco {
+    # PartsPresent SIN_COS_LUT_only
+    # Noise_Shaping Taylor_Series_Corrected
+    # PHASE_WIDTH 24
+    # OUTPUT_WIDTH 16
+    # Memory_Type Auto
+    # Has_Phase_Out false
+    # DSP48_USE Minimal
+    # NEGATIVE_SINE true
+# } {
+    # aclk /pll_0/clk_out1
+    # S_AXIS_PHASE /flocra/DDS0_PHASE_AXIS
+# }
+
+cell open-mri:user:DDS:1.0 tx1_nco {
+    PHASE_DW 24
+    OUT_DW 16
+    USE_TAYLOR 1
+    LUT_DW 9
+    SIN_COS 1
 } {
-    aclk /pll_0/clk_out1
+    clk /pll_0/clk_out1
     S_AXIS_PHASE /flocra/DDS1_PHASE_AXIS
+	reset_n /rst_0/peripheral_aresetn	    
 }
+
+# cell xilinx.com:ip:dds_compiler:6.0 tx1_nco {
+    # PartsPresent SIN_COS_LUT_only
+    # Noise_Shaping Taylor_Series_Corrected
+    # PHASE_WIDTH 24
+    # OUTPUT_WIDTH 16
+    # Memory_Type Auto
+    # Has_Phase_Out false
+    # DSP48_USE Minimal
+    # NEGATIVE_SINE true
+# } {
+    # aclk /pll_0/clk_out1
+    # S_AXIS_PHASE /flocra/DDS1_PHASE_AXIS
+# }
 
 cell xilinx.com:ip:dds_compiler:6.0 tx2_nco {
     PartsPresent SIN_COS_LUT_only
@@ -131,7 +155,7 @@ cell xilinx.com:ip:axis_broadcaster:1.1 bcast_nco0 {
   HAS_TREADY 0
 } {
     M00_AXIS mult_0/S_AXIS_B
-    S_AXIS tx0_nco/M_AXIS_DATA
+    S_AXIS tx0_nco/M_AXIS_OUT
 	aclk /pll_0/clk_out1	
 	aresetn /rst_0/peripheral_aresetn		
 }
@@ -147,7 +171,7 @@ cell xilinx.com:ip:axis_broadcaster:1.1 bcast_nco1 {
   HAS_TREADY 0
 } {
     M00_AXIS mult_1/S_AXIS_B
-    S_AXIS tx1_nco/M_AXIS_DATA
+    S_AXIS tx1_nco/M_AXIS_OUT
 	aclk /pll_0/clk_out1
 	aresetn /rst_0/peripheral_aresetn		
 }

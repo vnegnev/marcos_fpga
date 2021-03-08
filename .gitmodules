@@ -5,7 +5,12 @@
 [submodule "hdl/submodules/flocra"]
 	path = hdl/submodules/flocra
 	url = http://github.com/catkira/flocra
-	branch = master
+	branch = devel
 [submodule "hdl/submodules/CIC"]
 	path = hdl/submodules/CIC
 	url = git@github.com:catkira/CIC.git
+	branch = master
+[submodule "hdl/submodules/DDS"]
+	path = hdl/submodules/DDS
+	url = git@github.com:catkira/DDS.git
+	branch = master
