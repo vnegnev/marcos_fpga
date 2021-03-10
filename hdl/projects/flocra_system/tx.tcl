@@ -6,7 +6,7 @@ cell open-mri:user:complex_multiplier:1.0 mult_0 {
   OPERAND_WIDTH_OUT 16
   BLOCKING 0
   STAGES 3
-  TRUNCATE 1
+  TRUNCATE 0
 } {
     S_AXIS_A /flocra/TX0_AXIS
     aclk /pll_0/clk_out1
@@ -19,7 +19,7 @@ cell open-mri:user:complex_multiplier:1.0 mult_1 {
   OPERAND_WIDTH_OUT 16
   BLOCKING 0
   STAGES 3
-  TRUNCATE 1
+  TRUNCATE 0
 } {
     S_AXIS_A /flocra/TX1_AXIS
 	aclk /pll_0/clk_out1
