@@ -21,8 +21,8 @@ cell open-mri:user:complex_multiplier:1.0 mult_0 {
   OPERAND_WIDTH_B 16
   OPERAND_WIDTH_OUT 32
   BLOCKING 0
-  STAGES 3
-  TRUNCATE 0  
+  STAGES 6
+  ROUND_MODE 1  
 } {
     S_AXIS_A real_selector/M_AXIS
     S_AXIS_B S_AXIS_DDS_IQ
