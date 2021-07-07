@@ -4,7 +4,7 @@
 	branch = master
 [submodule "hdl/submodules/flocra"]
 	path = hdl/submodules/flocra
-	url = http://github.com/catkira/flocra
+	url = http://github.com/vnegnev/flocra
 	branch = devel
 [submodule "hdl/submodules/CIC"]
 	path = hdl/submodules/CIC
