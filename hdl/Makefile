@@ -6,8 +6,6 @@
 LD_LIBRARY_PATH =
 
 NAME = marcos_fpga
-PART_VARIANT ?= Z20
-ifeq ($(PART_VARIANT),Z20)
 PART = xc7z020clg400-1
 HWNAME = stemlab_sdr
 
@@ -15,15 +13,7 @@ CORES_PAVEL = axi_cfg_register_v1_0 axis_constant_v1_0 \
         axis_$(HWNAME)_adc_v1_0 axis_$(HWNAME)_dac_v1_0 \
         axis_zeroer_v1_0 axis_variable_v1_0 axis_interpolator_v1_0 \
         axi_sts_register_v1_0
-else
-PART = xc7z010clg400-1
-HWNAME = red_pitaya
 
-CORES_PAVEL = axi_cfg_register_v1_0 axis_constant_v1_0 \
-        axis_$(HWNAME)_adc_v2_0 axis_$(HWNAME)_dac_v1_0 \
-        axis_zeroer_v1_0 axis_variable_v1_0 axis_interpolator_v1_0 \
-        axi_sts_register_v1_0 
-endif
 PROC = ps7_cortexa9_0
 
 CORES = flocra_v1_0 complex_multiplier_v1_0 CIC_v1_0 DDS_v1_0
@@ -49,12 +39,12 @@ hdf: tmp/$(NAME).hdf
 $(DTREE_TAR):
 	mkdir -p $(@D)
 	curl -L $(DTREE_URL) -o $@
-	
+
 $(DTREE_DIR): $(DTREE_TAR)
 	mkdir -p $@
 	tar -zxf $< --strip-components=1 --directory=$@
 
-tmp/cores_pavel/%: cores_pavel/%/core_config.tcl cores_pavel/%/*.v 
+tmp/cores_pavel/%: cores_pavel/%/core_config.tcl cores_pavel/%/*.v
 	mkdir -p $(@D)
 	$(VIVADO) -source scripts/core_pavel.tcl -tclargs $* $(PART)
 
@@ -62,7 +52,7 @@ tmp/cores/%: cores/%/core_config.tcl $(cores/%/*.v)  $(cores_pavel/%/*.sv)
 	mkdir -p $(@D)
 	$(VIVADO) -source scripts/core.tcl -tclargs $* $(PART)
 
-tmp/%.xpr: projects/% $(addprefix tmp/cores_pavel/, $(CORES_PAVEL)) $(addprefix tmp/cores/, $(CORES)) 
+tmp/$(NAME).xpr: projects/$(NAME) $(addprefix tmp/cores_pavel/, $(CORES_PAVEL)) $(addprefix tmp/cores/, $(CORES))
 	mkdir -p $(@D)
 	$(VIVADO) -source scripts/project.tcl -tclargs $* $(PART) $(PART_VARIANT)
 
@@ -78,13 +68,13 @@ tmp/%.bit: tmp/%.xpr
 tmp/%.bit.bin: tmp/%.bit
 	echo "all:{ $^}" > tmp/marcos_fpga.bif
 	bootgen -image tmp/marcos_fpga.bif -arch zynq -process_bitstream bin -w -o $@
-	
+
 tmp/%.tree/system.dts: tmp/%.hdf $(DTREE_DIR)
 	mkdir -p $(@D)
-	xsct scripts/devicetree.tcl $(NAME) $(PROC) $(DTREE_DIR)	
-	
+	xsct scripts/devicetree.tcl $(NAME) $(PROC) $(DTREE_DIR)
+
 tmp/$(NAME).dtbo: tmp/$(NAME).tree/system.dts
-	dtc -O dtb -o tmp/$(NAME).dtbo -b 0 -@ tmp/$(NAME).tree/pl.dtsi	
+	dtc -O dtb -o tmp/$(NAME).dtbo -b 0 -@ tmp/$(NAME).tree/pl.dtsi
 
 clean:
 	$(RM) fw_printenv tmp
