@@ -11,24 +11,22 @@ ifeq ($(PART_VARIANT),Z20)
 PART = xc7z020clg400-1
 HWNAME = stemlab_sdr
 
-CORES_PAVEL = axi_axis_reader_v1_0 axi_axis_writer_v1_0 axi_bram_reader_v1_0 \
-	axi_bram_writer_v1_0 axi_cfg_register_v1_0 axis_bram_reader_v1_0 axis_bram_writer_v1_0 axis_constant_v1_0 \
-        axis_fifo_v1_0 axis_ram_writer_v1_0 axis_$(HWNAME)_adc_v1_0 axis_$(HWNAME)_dac_v1_0 \
+CORES_PAVEL = axi_cfg_register_v1_0 axis_constant_v1_0 \
+        axis_$(HWNAME)_adc_v1_0 axis_$(HWNAME)_dac_v1_0 \
         axis_zeroer_v1_0 axis_variable_v1_0 axis_interpolator_v1_0 \
         axi_sts_register_v1_0
 else
 PART = xc7z010clg400-1
 HWNAME = red_pitaya
 
-CORES_PAVEL = axi_axis_reader_v1_0 axi_axis_writer_v1_0 axi_bram_reader_v1_0 \
-	axi_bram_writer_v1_0 axi_cfg_register_v1_0 axis_bram_reader_v1_0 axis_bram_writer_v1_0 axis_constant_v1_0 \
-        axis_fifo_v1_0 axis_ram_writer_v1_0 axis_$(HWNAME)_adc_v2_0 axis_$(HWNAME)_dac_v1_0 \
+CORES_PAVEL = axi_cfg_register_v1_0 axis_constant_v1_0 \
+        axis_$(HWNAME)_adc_v2_0 axis_$(HWNAME)_dac_v1_0 \
         axis_zeroer_v1_0 axis_variable_v1_0 axis_interpolator_v1_0 \
         axi_sts_register_v1_0 
 endif
 PROC = ps7_cortexa9_0
 
-CORES = axi_serial_attenuator_v1_0 flocra_v1_0 complex_multiplier_v1_0 CIC_v1_0 DDS_v1_0
+CORES = flocra_v1_0 complex_multiplier_v1_0 CIC_v1_0 DDS_v1_0
 
 VIVADO = vivado -nolog -nojournal -mode batch
 RM = rm -rf
