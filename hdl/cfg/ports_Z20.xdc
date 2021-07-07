@@ -182,6 +182,14 @@ set_property PACKAGE_PIN M14 [get_ports {exp_p_tri_io[6]}]
 set_property IOSTANDARD LVCMOS33 [get_ports exp_p_tri_io_i]
 set_property PACKAGE_PIN K16 [get_ports exp_p_tri_io_i]
 
+# Trigger output, DIO8_P (RP-122 only)
+set_property IOSTANDARD LVCMOS33 [get_ports trig_o]
+set_property PACKAGE_PIN Y9 [get_ports trig_o]
+
+# Trigger input, DIO8_N (RP-122 only)
+set_property IOSTANDARD LVCMOS33 [get_ports trig_i]
+set_property PACKAGE_PIN Y8 [get_ports trig_i]
+
 ### SATA connector
 
 set_property IOSTANDARD DIFF_HSTL_I_18 [get_ports daisy_p_o[*]]

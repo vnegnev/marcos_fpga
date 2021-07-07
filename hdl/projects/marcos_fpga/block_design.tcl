@@ -194,11 +194,14 @@ cell xilinx.com:ip:xlconcat:2.1 nio_concat_0 {
 connect_bd_net [get_bd_pins nio_concat_0/In0] [get_bd_pins spi_concat_0/dout]
 connect_bd_net [get_bd_pins nio_concat_0/In1] [get_bd_pins flocra/tx_gate_o]
 
+create_bd_port -dir I -type data trig_i
+create_bd_port -dir O -type data trig_o
 
 # connect to pins
 connect_bd_net [get_bd_pins exp_p_tri_io_i] [get_bd_pins flocra/fhdo_sdi_i]
+connect_bd_net [get_bd_ports trig_o] [get_bd_pins flocra/rx_gate_o]
+connect_bd_net [get_bd_ports trig_i] [get_bd_pins flocra/trig_i]
 connect_bd_net [get_bd_pins exp_n_tri_io] [get_bd_pins nio_concat_0/Dout]
 connect_bd_net [get_bd_pins exp_p_tri_io] [get_bd_pins pio_concat_0/Dout]
-
 
 
