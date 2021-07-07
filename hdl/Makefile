@@ -69,15 +69,15 @@ tmp/%.xpr: projects/% $(addprefix tmp/cores_pavel/, $(CORES_PAVEL)) $(addprefix 
 tmp/%.hdf: tmp/%.xpr
 	mkdir -p $(@D)
 	$(VIVADO) -source scripts/hwdef.tcl -tclargs $*
-	cp tmp/flocra_system.xsa tmp/flocra_system.hdf
+	cp tmp/marcos_fpga.xsa tmp/marcos_fpga.hdf
 
 tmp/%.bit: tmp/%.xpr
 	mkdir -p $(@D)
 	$(VIVADO) -source scripts/bitstream.tcl -tclargs $*
 
 tmp/%.bit.bin: tmp/%.bit
-	echo "all:{ $^}" > tmp/flocra_system.bif
-	bootgen -image tmp/flocra_system.bif -arch zynq -process_bitstream bin -w -o $@
+	echo "all:{ $^}" > tmp/marcos_fpga.bif
+	bootgen -image tmp/marcos_fpga.bif -arch zynq -process_bitstream bin -w -o $@
 	
 tmp/%.tree/system.dts: tmp/%.hdf $(DTREE_DIR)
 	mkdir -p $(@D)
