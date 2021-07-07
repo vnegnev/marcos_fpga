@@ -124,7 +124,7 @@ set_property RANGE 512K [get_bd_addr_segs ps_0/Data/SEG_flocra_reg0]
 set_property OFFSET 0x43C00000 [get_bd_addr_segs ps_0/Data/SEG_flocra_reg0]
 
 module rx_0 {
-  source projects/flocra_system/rx.tcl
+  source projects/marcos_fpga/rx.tcl
 } {
     S_AXIS_ADC adc_ab/M00_AXIS
     comb_iqmerge/M_AXIS flocra/RX0_AXIS
@@ -134,7 +134,7 @@ module rx_0 {
 }
 
 module rx_1 {
-  source projects/flocra_system/rx.tcl
+  source projects/marcos_fpga/rx.tcl
 } {
     S_AXIS_ADC adc_ab/M01_AXIS
     comb_iqmerge/M_AXIS flocra/RX1_AXIS
@@ -144,7 +144,7 @@ module rx_1 {
 }
 
 module tx_0 {
-  source projects/flocra_system/tx.tcl
+  source projects/marcos_fpga/tx.tcl
 } {
     bcast_nco0/M01_AXIS flocra/DDS0_IQ_AXIS
     bcast_nco1/M01_AXIS flocra/DDS1_IQ_AXIS

@@ -5,7 +5,7 @@
 # NAME is the base name for most of the generated files.
 LD_LIBRARY_PATH =
 
-NAME = flocra_system
+NAME = marcos_fpga
 PART_VARIANT ?= Z20
 ifeq ($(PART_VARIANT),Z20)
 PART = xc7z020clg400-1
