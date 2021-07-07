@@ -1,10 +1,10 @@
 [submodule "hdl/submodules/complex_multiplier"]
 	path = hdl/submodules/complex_multiplier
-	url = http://github.com/catkira/complex_multiplier
+	url = git@github.com:catkira/complex_multiplier
 	branch = master
 [submodule "hdl/submodules/flocra"]
 	path = hdl/submodules/flocra
-	url = http://github.com/vnegnev/flocra
+	url = git@github.com:vnegnev/flocra.git
 	branch = devel
 [submodule "hdl/submodules/CIC"]
 	path = hdl/submodules/CIC
