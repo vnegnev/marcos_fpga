@@ -31,7 +31,7 @@ CORES = flocra_v1_0 complex_multiplier_v1_0 CIC_v1_0 DDS_v1_0
 VIVADO = vivado -nolog -nojournal -mode batch
 RM = rm -rf
 
-DTREE_TAG = xilinx-v2019.2
+DTREE_TAG = xilinx-v2020.2
 DTREE_DIR = utils/device-tree-xlnx-$(DTREE_TAG)
 DTREE_TAR = utils/device-tree-xlnx-$(DTREE_TAG).tar.gz
 DTREE_URL = https://github.com/Xilinx/device-tree-xlnx/archive/$(DTREE_TAG).tar.gz
