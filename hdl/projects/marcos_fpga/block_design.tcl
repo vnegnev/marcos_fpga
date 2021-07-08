@@ -143,12 +143,20 @@ module rx_1 {
     rx_aresetn flocra/rx1_rst_n_o
 }
 
+# module tx_0 {
+  # source projects/marcos_fpga/tx.tcl
+# } {
+    # bcast_nco0/M01_AXIS flocra/DDS0_IQ_AXIS
+    # bcast_nco1/M01_AXIS flocra/DDS1_IQ_AXIS
+    # tx2_nco/M_AXIS_DATA flocra/DDS2_IQ_AXIS
+# }
+
 module tx_0 {
   source projects/marcos_fpga/tx.tcl
 } {
     bcast_nco0/M01_AXIS flocra/DDS0_IQ_AXIS
     bcast_nco1/M01_AXIS flocra/DDS1_IQ_AXIS
-    tx2_nco/M_AXIS_DATA flocra/DDS2_IQ_AXIS
+    tx2_nco/M_AXIS_OUT flocra/DDS2_IQ_AXIS
 }
 
 
