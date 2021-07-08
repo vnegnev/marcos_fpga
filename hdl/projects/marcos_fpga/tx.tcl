@@ -132,19 +132,32 @@ cell open-mri:user:DDS:1.0 tx1_nco {
     # S_AXIS_PHASE /flocra/DDS1_PHASE_AXIS
 # }
 
-cell xilinx.com:ip:dds_compiler:6.0 tx2_nco {
-    PartsPresent SIN_COS_LUT_only
-    Noise_Shaping Taylor_Series_Corrected
-    PHASE_WIDTH 24
-    OUTPUT_WIDTH 16
-    Memory_Type Auto
-    Has_Phase_Out false
-    DSP48_USE Minimal
-    NEGATIVE_SINE true
+cell open-mri:user:DDS:1.0 tx2_nco {
+    PHASE_DW 24
+    OUT_DW 16
+    USE_TAYLOR 1
+    LUT_DW 9
+    SIN_COS 1
+    NEGATIVE_SINE 1
 } {
-    aclk /pll_0/clk_out1
+    clk /pll_0/clk_out1
     S_AXIS_PHASE /flocra/DDS2_PHASE_AXIS
+	reset_n /rst_0/peripheral_aresetn	    
 }
+
+# cell xilinx.com:ip:dds_compiler:6.0 tx2_nco {
+    # PartsPresent SIN_COS_LUT_only
+    # Noise_Shaping Taylor_Series_Corrected
+    # PHASE_WIDTH 24
+    # OUTPUT_WIDTH 16
+    # Memory_Type Auto
+    # Has_Phase_Out false
+    # DSP48_USE Minimal
+    # NEGATIVE_SINE true
+# } {
+    # aclk /pll_0/clk_out1
+    # S_AXIS_PHASE /flocra/DDS2_PHASE_AXIS
+# }
 
 cell xilinx.com:ip:axis_broadcaster:1.1 bcast_nco0 {
   NUM_MI 2
