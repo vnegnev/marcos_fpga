@@ -59,94 +59,104 @@ cell xilinx.com:ip:axis_broadcaster:1.1 rate {
 	aresetn rx_aresetn	
 }
 
-cell open-mri:user:CIC:1.0 cic_real {
-  INP_DW 32
-  OUT_DW 32
-  RATE_DW 16
-  CIC_R 4095
-  CIC_N 6
-  CIC_M 1
-  PRUNE_BITS 0x480000004500000044000000440000004300000042000000410000003c00000031000000270000001c000000100000000400000000
-  VAR_RATE 1  
-  EXACT_SCALING 0
-  PRG_SCALING 1  
-} {
-    S_AXIS_RATE rate/M00_AXIS
-    S_AXIS_IN comb2iq/M00_AXIS
-	clk /pll_0/clk_out1  
-	reset_n rx_aresetn	
-}
-
-# cell xilinx.com:ip:cic_compiler:4.0 cic_real {
-  # INPUT_DATA_WIDTH.VALUE_SRC USER
-  # FILTER_TYPE Decimation
-  # NUMBER_OF_STAGES 6
-  # SAMPLE_RATE_CHANGES Programmable
-  # MINIMUM_RATE 4
-  # MAXIMUM_RATE 4095
-  # FIXED_OR_INITIAL_RATE 512
-  # RATESPECIFICATION Sample_Period
-  # SAMPLEPERIOD 1
-  # INPUT_DATA_WIDTH 32
-  # QUANTIZATION Truncation
-  # OUTPUT_DATA_WIDTH 32
-  # USE_XTREME_DSP_SLICE true
-  # HAS_DOUT_TREADY false
-  # HAS_ARESETN true
+# cell open-mri:user:CIC:1.0 cic_real {
+  # INP_DW 32
+  # OUT_DW 32
+  # RATE_DW 16
+  # CIC_R 4095
+  # CIC_N 6
+  # CIC_M 1
+  # PRUNE_BITS 0x480000004500000044000000440000004300000042000000410000003c00000031000000270000001c000000100000000400000000
+  # VAR_RATE 1  
+  # EXACT_SCALING 0
+  # PRG_SCALING 1  
 # } {
-	# S_AXIS_DATA comb2iq/M00_AXIS
-	# S_AXIS_CONFIG rate/M00_AXIS
-	# aclk /pll_0/clk_out1  
-	# aresetn rx_aresetn	
+    # S_AXIS_RATE rate/M00_AXIS
+    # S_AXIS_IN comb2iq/M00_AXIS
+	# clk /pll_0/clk_out1  
+	# reset_n rx_aresetn	
 # }
 
-cell open-mri:user:CIC:1.0 cic_imag {
-  INP_DW 32
-  OUT_DW 32
-  RATE_DW 16
-  CIC_R 4095
-  CIC_N 6
-  CIC_M 1
-  PRUNE_BITS 0x480000004500000044000000440000004300000042000000410000003c00000031000000270000001c000000100000000400000000
-  VAR_RATE 1
-  EXACT_SCALING 0
-  PRG_SCALING 1
+cell xilinx.com:ip:cic_compiler:4.0 cic_real {
+  INPUT_DATA_WIDTH.VALUE_SRC USER
+  FILTER_TYPE Decimation
+  NUMBER_OF_STAGES 6
+  SAMPLE_RATE_CHANGES Programmable
+  MINIMUM_RATE 4
+  MAXIMUM_RATE 4095
+  FIXED_OR_INITIAL_RATE 512
+  RATESPECIFICATION Sample_Period
+  SAMPLEPERIOD 1
+  INPUT_DATA_WIDTH 32
+  QUANTIZATION Truncation
+  OUTPUT_DATA_WIDTH 32
+  USE_XTREME_DSP_SLICE true
+  HAS_DOUT_TREADY false
+  HAS_ARESETN true
 } {
-    S_AXIS_RATE rate/M01_AXIS
-    S_AXIS_IN comb2iq/M01_AXIS
-	clk /pll_0/clk_out1  
-	reset_n rx_aresetn	
+	S_AXIS_DATA comb2iq/M00_AXIS
+	S_AXIS_CONFIG rate/M00_AXIS
+	aclk /pll_0/clk_out1  
+	aresetn rx_aresetn	
 }
 
-# cell xilinx.com:ip:cic_compiler:4.0 cic_imag {
-  # INPUT_DATA_WIDTH.VALUE_SRC USER
-  # FILTER_TYPE Decimation
-  # NUMBER_OF_STAGES 6
-  # SAMPLE_RATE_CHANGES Programmable
-  # MINIMUM_RATE 4
-  # MAXIMUM_RATE 4095
-  # FIXED_OR_INITIAL_RATE 512
-  # RATESPECIFICATION Sample_Period
-  # SAMPLEPERIOD 1
-  # INPUT_DATA_WIDTH 32
-  # QUANTIZATION Truncation
-  # OUTPUT_DATA_WIDTH 32
-  # USE_XTREME_DSP_SLICE true
-  # HAS_DOUT_TREADY false
-  # HAS_ARESETN true
+# cell open-mri:user:CIC:1.0 cic_imag {
+  # INP_DW 32
+  # OUT_DW 32
+  # RATE_DW 16
+  # CIC_R 4095
+  # CIC_N 6
+  # CIC_M 1
+  # PRUNE_BITS 0x480000004500000044000000440000004300000042000000410000003c00000031000000270000001c000000100000000400000000
+  # VAR_RATE 1
+  # EXACT_SCALING 0
+  # PRG_SCALING 1
 # } {
-	# S_AXIS_DATA comb2iq/M01_AXIS
-	# S_AXIS_CONFIG rate/M01_AXIS
-	# aclk /pll_0/clk_out1
-	# aresetn rx_aresetn 
+    # S_AXIS_RATE rate/M01_AXIS
+    # S_AXIS_IN comb2iq/M01_AXIS
+	# clk /pll_0/clk_out1  
+	# reset_n rx_aresetn	
+# }
+
+cell xilinx.com:ip:cic_compiler:4.0 cic_imag {
+  INPUT_DATA_WIDTH.VALUE_SRC USER
+  FILTER_TYPE Decimation
+  NUMBER_OF_STAGES 6
+  SAMPLE_RATE_CHANGES Programmable
+  MINIMUM_RATE 4
+  MAXIMUM_RATE 4095
+  FIXED_OR_INITIAL_RATE 512
+  RATESPECIFICATION Sample_Period
+  SAMPLEPERIOD 1
+  INPUT_DATA_WIDTH 32
+  QUANTIZATION Truncation
+  OUTPUT_DATA_WIDTH 32
+  USE_XTREME_DSP_SLICE true
+  HAS_DOUT_TREADY false
+  HAS_ARESETN true
+} {
+	S_AXIS_DATA comb2iq/M01_AXIS
+	S_AXIS_CONFIG rate/M01_AXIS
+	aclk /pll_0/clk_out1
+	aresetn rx_aresetn 
+}
+
+# cell xilinx.com:ip:axis_combiner:1.1 comb_iqmerge {
+  # NUM_SI 2
+  # TDATA_NUM_BYTES 4
+# } {
+    # S00_AXIS cic_real/M_AXIS_OUT
+    # S01_AXIS cic_imag/M_AXIS_OUT
+    # aclk /pll_0/clk_out1
+	# aresetn rx_aresetn
 # }
 
 cell xilinx.com:ip:axis_combiner:1.1 comb_iqmerge {
   NUM_SI 2
   TDATA_NUM_BYTES 4
 } {
-    S00_AXIS cic_real/M_AXIS_OUT
-    S01_AXIS cic_imag/M_AXIS_OUT
+    S00_AXIS cic_real/M_AXIS_DATA
+    S01_AXIS cic_imag/M_AXIS_DATA
     aclk /pll_0/clk_out1
 	aresetn rx_aresetn
 }
