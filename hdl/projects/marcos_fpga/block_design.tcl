@@ -181,11 +181,12 @@ create_bd_port -dir O -from 7 -to 0 exp_n_tri_io
 create_bd_port -dir I -type data exp_p_tri_io_i
 
 cell xilinx.com:ip:xlconcat:2.1 pio_concat_0 {
-    NUM_PORTS 6
+    NUM_PORTS 7
 } {
 	In3 flocra/fhdo_clk_o
 	In4 flocra/fhdo_ssn_o
 	In5 flocra/fhdo_sdo_o
+    In6 flocra/rx_gate_o
 }
 
 cell xilinx.com:ip:xlconcat:2.1 nio_concat_0 {
@@ -199,7 +200,7 @@ create_bd_port -dir O -type data trig_o
 
 # connect to pins
 connect_bd_net [get_bd_pins exp_p_tri_io_i] [get_bd_pins flocra/fhdo_sdi_i]
-connect_bd_net [get_bd_ports trig_o] [get_bd_pins flocra/rx_gate_o]
+connect_bd_net [get_bd_ports trig_o] [get_bd_pins flocra/trig_o]
 connect_bd_net [get_bd_ports trig_i] [get_bd_pins flocra/trig_i]
 connect_bd_net [get_bd_pins exp_n_tri_io] [get_bd_pins nio_concat_0/Dout]
 connect_bd_net [get_bd_pins exp_p_tri_io] [get_bd_pins pio_concat_0/Dout]
