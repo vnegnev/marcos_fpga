@@ -6,6 +6,8 @@ Steps to compile the bitstream and XSA files:
 
 - git submodule update --init --remote
 
+(next 3 steps optional, needed to run the loopback test)
+
 cd ..
 
 git clone -b reset_instruction https://github.com/catkira/ocra-pulseq
@@ -19,7 +21,7 @@ To compile the HDL sources do: (not necessary if bit files from marcos_extras ar
 - install Vivado + Vitis on Linux (at least 2020.2)
 - cd into the hdl folder
 - Run `. /opt/Xilinx/Vitis/2020.2/settings64.sh`
-- type "make", this will create a .bit file for the fpga
+- type "make -j4", this will create .bit, .bin and .dtbo files for the fpga inside the `hdl/tmp` folder (change 4 to number of processes you want to run in parallel)
 
 To run the loopback test do:
 - go into marcos_extras

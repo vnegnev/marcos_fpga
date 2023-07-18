@@ -7,6 +7,7 @@ LD_LIBRARY_PATH =
 
 NAME = marcos_fpga
 PART = xc7z020clg400-1
+PART_VARIANT = Z20  # can also be Z10, currently unsupported however
 HWNAME = stemlab_sdr
 
 CORES_PAVEL = axi_cfg_register_v1_0 axis_constant_v1_0 \
@@ -52,7 +53,7 @@ tmp/cores/%: cores/%/core_config.tcl $(cores/%/*.v)  $(cores_pavel/%/*.sv)
 	mkdir -p $(@D)
 	$(VIVADO) -source scripts/core.tcl -tclargs $* $(PART)
 
-tmp/$(NAME).xpr: projects/$(NAME) $(addprefix tmp/cores_pavel/, $(CORES_PAVEL)) $(addprefix tmp/cores/, $(CORES))
+tmp/%.xpr: projects/% $(addprefix tmp/cores_pavel/, $(CORES_PAVEL)) $(addprefix tmp/cores/, $(CORES))
 	mkdir -p $(@D)
 	$(VIVADO) -source scripts/project.tcl -tclargs $* $(PART) $(PART_VARIANT)
 

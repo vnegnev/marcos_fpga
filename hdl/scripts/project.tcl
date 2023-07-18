@@ -3,6 +3,8 @@ set project_name [lindex $argv 0]
 
 set part_name [lindex $argv 1]
 
+set part_variant [lindex $argv 2]
+
 file delete -force tmp/$project_name.cache tmp/$project_name.hw tmp/$project_name.srcs tmp/$project_name.runs tmp/$project_name.xpr
 
 create_project -part $part_name $project_name tmp
@@ -12,8 +14,6 @@ set_property IP_REPO_PATHS {tmp/cores tmp/cores_pavel} [current_project]
 set bd_path tmp/$project_name.srcs/sources_1/bd/system
 
 create_bd_design system
-
-set part_variant [lindex $argv 2]
 
 if {$part_variant=="Z20"} {
 	source cfg/ports_Z20.tcl
