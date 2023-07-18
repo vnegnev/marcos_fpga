@@ -1,0 +1,1 @@
+../../submodules/marga/hdl/marga.sv

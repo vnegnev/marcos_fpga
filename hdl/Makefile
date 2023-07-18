@@ -16,7 +16,7 @@ CORES_PAVEL = axi_cfg_register_v1_0 axis_constant_v1_0 \
 
 PROC = ps7_cortexa9_0
 
-CORES = flocra_v1_0 complex_multiplier_v1_0 CIC_v1_0 DDS_v1_0
+CORES = marga_v1_0 complex_multiplier_v1_0 CIC_v1_0 DDS_v1_0
 
 VIVADO = vivado -nolog -nojournal -mode batch
 RM = rm -rf
