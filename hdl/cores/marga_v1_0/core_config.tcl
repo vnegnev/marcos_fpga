@@ -1,4 +1,4 @@
-set display_name {FLOCRA}
+set display_name {MARGA}
 
 set core [ipx::current_core]
 

@@ -16,9 +16,9 @@ git clone -b hf_chain_reset https://github.com/catkira/marcos_extras.git
 
 
 To compile the HDL sources do: (not necessary if bit files from marcos_extras are used)
-- install Vivado on Linux (at least 2019.2)
-- go into ocra/HDL
-- parse settings64-Vitis.sh
+- install Vivado + Vitis on Linux (at least 2020.2)
+- cd into the hdl folder
+- Run `. /opt/Xilinx/Vitis/2020.2/settings64.sh`
 - type "make", this will create a .bit file for the fpga
 
 To run the loopback test do:

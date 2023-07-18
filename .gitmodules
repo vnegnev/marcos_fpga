@@ -5,7 +5,7 @@
 [submodule "hdl/submodules/marga"]
 	path = hdl/submodules/marga
 	url = git@github.com:vnegnev/marga.git
-	branch = devel
+	branch = master
 [submodule "hdl/submodules/CIC"]
 	path = hdl/submodules/CIC
 	url = git@github.com:catkira/CIC.git
