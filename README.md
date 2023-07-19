@@ -4,7 +4,7 @@ Steps to compile the bitstream and XSA files:
 
 - Clone this project
 
-- git submodule update --init --remote
+- git submodule update --init
 
 (next 3 steps optional, needed to run the loopback test)
 
