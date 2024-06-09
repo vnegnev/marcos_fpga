@@ -128,29 +128,29 @@ set_property PACKAGE_PIN T11 [get_ports {dac_pwm_o[1]}]
 set_property PACKAGE_PIN P15 [get_ports {dac_pwm_o[2]}]
 set_property PACKAGE_PIN U13 [get_ports {dac_pwm_o[3]}]
 
-### XADC
+#### XADC
 
-set_property IOSTANDARD LVCMOS33 [get_ports Vp_Vn_v_p]
-set_property IOSTANDARD LVCMOS33 [get_ports Vp_Vn_v_n]
-set_property IOSTANDARD LVCMOS33 [get_ports Vaux0_v_p]
-set_property IOSTANDARD LVCMOS33 [get_ports Vaux0_v_n]
-set_property IOSTANDARD LVCMOS33 [get_ports Vaux1_v_p]
-set_property IOSTANDARD LVCMOS33 [get_ports Vaux1_v_n]
-set_property IOSTANDARD LVCMOS33 [get_ports Vaux8_v_p]
-set_property IOSTANDARD LVCMOS33 [get_ports Vaux8_v_n]
-set_property IOSTANDARD LVCMOS33 [get_ports Vaux9_v_p]
-set_property IOSTANDARD LVCMOS33 [get_ports Vaux9_v_n]
+#set_property IOSTANDARD LVCMOS33 [get_ports Vp_Vn_v_p]
+#set_property IOSTANDARD LVCMOS33 [get_ports Vp_Vn_v_n]
+#set_property IOSTANDARD LVCMOS33 [get_ports Vaux0_v_p]
+#set_property IOSTANDARD LVCMOS33 [get_ports Vaux0_v_n]
+#set_property IOSTANDARD LVCMOS33 [get_ports Vaux1_v_p]
+#set_property IOSTANDARD LVCMOS33 [get_ports Vaux1_v_n]
+#set_property IOSTANDARD LVCMOS33 [get_ports Vaux8_v_p]
+#set_property IOSTANDARD LVCMOS33 [get_ports Vaux8_v_n]
+#set_property IOSTANDARD LVCMOS33 [get_ports Vaux9_v_p]
+#set_property IOSTANDARD LVCMOS33 [get_ports Vaux9_v_n]
 
-set_property PACKAGE_PIN K9  [get_ports Vp_Vn_v_p]
-set_property PACKAGE_PIN L10 [get_ports Vp_Vn_v_n]
-set_property PACKAGE_PIN C20 [get_ports Vaux0_v_p]
-set_property PACKAGE_PIN B20 [get_ports Vaux0_v_n]
-set_property PACKAGE_PIN E17 [get_ports Vaux1_v_p]
-set_property PACKAGE_PIN D18 [get_ports Vaux1_v_n]
-set_property PACKAGE_PIN B19 [get_ports Vaux8_v_p]
-set_property PACKAGE_PIN A20 [get_ports Vaux8_v_n]
-set_property PACKAGE_PIN E18 [get_ports Vaux9_v_p]
-set_property PACKAGE_PIN E19 [get_ports Vaux9_v_n]
+#set_property PACKAGE_PIN K9  [get_ports Vp_Vn_v_p]
+#set_property PACKAGE_PIN L10 [get_ports Vp_Vn_v_n]
+#set_property PACKAGE_PIN C20 [get_ports Vaux0_v_p]
+#set_property PACKAGE_PIN B20 [get_ports Vaux0_v_n]
+#set_property PACKAGE_PIN E17 [get_ports Vaux1_v_p]
+#set_property PACKAGE_PIN D18 [get_ports Vaux1_v_n]
+#set_property PACKAGE_PIN B19 [get_ports Vaux8_v_p]
+#set_property PACKAGE_PIN A20 [get_ports Vaux8_v_n]
+#set_property PACKAGE_PIN E18 [get_ports Vaux9_v_p]
+#set_property PACKAGE_PIN E19 [get_ports Vaux9_v_n]
 
 ### Expansion connector
 
@@ -197,12 +197,12 @@ set_property PACKAGE_PIN M15 [get_ports {exp_n_tri_io[7]}]
 set_property PACKAGE_PIN M14 [get_ports {exp_p_tri_io[6]}]
 
 # GPA-FHDO ADC input
-set_property IOSTANDARD LVCMOS33 [get_ports exp_p_tri_io_i]
-set_property PACKAGE_PIN K16 [get_ports exp_p_tri_io_i]
+set_property IOSTANDARD LVCMOS33 [get_ports exp_p_tri_i]
+set_property PACKAGE_PIN K16 [get_ports exp_p_tri_i]
 
-# Trigger output, DIO8_P (RP-122 only)
-set_property IOSTANDARD LVCMOS33 [get_ports trig_o]
-set_property PACKAGE_PIN Y9 [get_ports trig_o]
+# RX gate output, DIO8_P (RP-122 only)
+set_property IOSTANDARD LVCMOS33 [get_ports rx_gate_o]
+set_property PACKAGE_PIN Y9 [get_ports rx_gate_o]
 
 # Trigger input, DIO8_N (RP-122 only)
 set_property IOSTANDARD LVCMOS33 [get_ports trig_i]
@@ -216,17 +216,17 @@ set_property IOSTANDARD DIFF_HSTL_I_18 [get_ports {ext_clk_n_o[0]}]
 set_property PACKAGE_PIN T12 [get_ports {ext_clk_p_o[0]}]
 set_property PACKAGE_PIN U12 [get_ports {ext_clk_n_o[0]}]
 
-set_property IOSTANDARD DIFF_HSTL_I_18 [get_ports daisy_p_o[*]]
-set_property IOSTANDARD DIFF_HSTL_I_18 [get_ports daisy_n_o[*]]
+#set_property IOSTANDARD DIFF_HSTL_I_18 [get_ports daisy_p_o[*]]
+#set_property IOSTANDARD DIFF_HSTL_I_18 [get_ports daisy_n_o[*]]
+
+## TODO check and adjust voltage, drive strength + slew rate
+set_property IOSTANDARD LVCMOS18 [get_ports trig_p_o]
+set_property IOSTANDARD LVCMOS18 [get_ports trig_n_o]
+set_property PACKAGE_PIN U14 [get_ports {trig_p_o}]
+set_property PACKAGE_PIN U15 [get_ports {trig_n_o}]
 
 set_property IOSTANDARD DIFF_HSTL_I_18 [get_ports daisy_p_i[*]]
 set_property IOSTANDARD DIFF_HSTL_I_18 [get_ports daisy_n_i[*]]
-
-#set_property PACKAGE_PIN T12 [get_ports {daisy_p_o[0]}]
-#set_property PACKAGE_PIN U12 [get_ports {daisy_n_o[0]}]
-
-set_property PACKAGE_PIN U14 [get_ports {daisy_p_o[1]}]
-set_property PACKAGE_PIN U15 [get_ports {daisy_n_o[1]}]
 
 set_property PACKAGE_PIN P14 [get_ports {daisy_p_i[0]}]
 set_property PACKAGE_PIN R14 [get_ports {daisy_n_i[0]}]

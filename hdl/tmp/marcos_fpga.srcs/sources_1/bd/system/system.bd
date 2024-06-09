@@ -1,7 +1,7 @@
 {
   "design": {
     "design_info": {
-      "boundary_crc": "0xC6C6C04C6A29CB2F",
+      "boundary_crc": "0x2AC88DCF63B24646",
       "device": "xc7z020clg400-1",
       "gen_directory": "../../../../marcos_fpga.gen/sources_1/bd/system",
       "name": "system",
@@ -61,7 +61,8 @@
       "util_ds_buf_0": "",
       "oddr_0": "",
       "xlconcat_0": "",
-      "xlslice_0": ""
+      "xlslice_0": "",
+      "util_vector_logic_0": ""
     },
     "interface_ports": {
       "Vp_Vn": {
@@ -250,7 +251,7 @@
           }
         }
       },
-      "exp_p_tri_io_i": {
+      "exp_p_tri_i": {
         "type": "data",
         "direction": "I",
         "parameters": {
@@ -270,7 +271,7 @@
           }
         }
       },
-      "trig_o": {
+      "rx_gate_o": {
         "type": "data",
         "direction": "O",
         "parameters": {
@@ -332,6 +333,34 @@
           },
           "PHASE": {
             "value": "0.0",
+            "value_src": "ip_prop"
+          }
+        }
+      },
+      "trig_p_o": {
+        "direction": "O",
+        "parameters": {
+          "PortType": {
+            "value": "undef",
+            "value_src": "ip_prop"
+          },
+          "PortType.PROP_SRC": {
+            "value": "false",
+            "value_src": "ip_prop"
+          }
+        }
+      },
+      "trig_n_o": {
+        "direction": "O",
+        "left": "0",
+        "right": "0",
+        "parameters": {
+          "PortType": {
+            "value": "undef",
+            "value_src": "ip_prop"
+          },
+          "PortType.PROP_SRC": {
+            "value": "false",
             "value_src": "ip_prop"
           }
         }
@@ -2178,16 +2207,16 @@
               }
             },
             "interface_nets": {
-              "s00_couplers_to_auto_pc": {
-                "interface_ports": [
-                  "S_AXI",
-                  "auto_pc/S_AXI"
-                ]
-              },
               "auto_pc_to_s00_couplers": {
                 "interface_ports": [
                   "M_AXI",
                   "auto_pc/M_AXI"
+                ]
+              },
+              "s00_couplers_to_auto_pc": {
+                "interface_ports": [
+                  "S_AXI",
+                  "auto_pc/S_AXI"
                 ]
               }
             },
@@ -2208,16 +2237,16 @@
           }
         },
         "interface_nets": {
-          "s00_couplers_to_ps_0_axi_periph": {
-            "interface_ports": [
-              "M00_AXI",
-              "s00_couplers/M_AXI"
-            ]
-          },
           "ps_0_axi_periph_to_s00_couplers": {
             "interface_ports": [
               "S00_AXI",
               "s00_couplers/S_AXI"
+            ]
+          },
+          "s00_couplers_to_ps_0_axi_periph": {
+            "interface_ports": [
+              "M00_AXI",
+              "s00_couplers/M_AXI"
             ]
           }
         },
@@ -3191,54 +3220,6 @@
           }
         },
         "interface_nets": {
-          "Conn8": {
-            "interface_ports": [
-              "M01_AXIS1",
-              "bcast_nco1/M01_AXIS"
-            ]
-          },
-          "Conn1": {
-            "interface_ports": [
-              "S_AXIS_A",
-              "mult_0/S_AXIS_A"
-            ]
-          },
-          "Conn2": {
-            "interface_ports": [
-              "S_AXIS_A1",
-              "mult_1/S_AXIS_A"
-            ]
-          },
-          "mult_0_M_AXIS_DOUT": {
-            "interface_ports": [
-              "real_0/S_AXIS",
-              "mult_0/M_AXIS_DOUT"
-            ]
-          },
-          "mult_1_M_AXIS_DOUT": {
-            "interface_ports": [
-              "real_1/S_AXIS",
-              "mult_1/M_AXIS_DOUT"
-            ]
-          },
-          "real_0_M_AXIS": {
-            "interface_ports": [
-              "axis_combiner_0/S00_AXIS",
-              "real_0/M_AXIS"
-            ]
-          },
-          "real_1_M_AXIS": {
-            "interface_ports": [
-              "axis_combiner_0/S01_AXIS",
-              "real_1/M_AXIS"
-            ]
-          },
-          "Conn3": {
-            "interface_ports": [
-              "M_AXIS",
-              "dac_truncator/M_AXIS"
-            ]
-          },
           "Conn4": {
             "interface_ports": [
               "S_AXIS_PHASE",
@@ -3287,16 +3268,64 @@
               "tx1_nco/M_AXIS_OUT"
             ]
           },
+          "Conn7": {
+            "interface_ports": [
+              "M01_AXIS",
+              "bcast_nco0/M01_AXIS"
+            ]
+          },
           "Conn9": {
             "interface_ports": [
               "M_AXIS_DATA",
               "tx2_nco/M_AXIS_DATA"
             ]
           },
-          "Conn7": {
+          "Conn8": {
             "interface_ports": [
-              "M01_AXIS",
-              "bcast_nco0/M01_AXIS"
+              "M01_AXIS1",
+              "bcast_nco1/M01_AXIS"
+            ]
+          },
+          "Conn1": {
+            "interface_ports": [
+              "S_AXIS_A",
+              "mult_0/S_AXIS_A"
+            ]
+          },
+          "Conn2": {
+            "interface_ports": [
+              "S_AXIS_A1",
+              "mult_1/S_AXIS_A"
+            ]
+          },
+          "mult_0_M_AXIS_DOUT": {
+            "interface_ports": [
+              "real_0/S_AXIS",
+              "mult_0/M_AXIS_DOUT"
+            ]
+          },
+          "mult_1_M_AXIS_DOUT": {
+            "interface_ports": [
+              "real_1/S_AXIS",
+              "mult_1/M_AXIS_DOUT"
+            ]
+          },
+          "real_0_M_AXIS": {
+            "interface_ports": [
+              "axis_combiner_0/S00_AXIS",
+              "real_0/M_AXIS"
+            ]
+          },
+          "real_1_M_AXIS": {
+            "interface_ports": [
+              "axis_combiner_0/S01_AXIS",
+              "real_1/M_AXIS"
+            ]
+          },
+          "Conn3": {
+            "interface_ports": [
+              "M_AXIS",
+              "dac_truncator/M_AXIS"
             ]
           }
         },
@@ -3417,9 +3446,29 @@
             "value": "7"
           }
         }
+      },
+      "util_vector_logic_0": {
+        "vlnv": "xilinx.com:ip:util_vector_logic:2.0",
+        "xci_name": "system_util_vector_logic_0_0",
+        "xci_path": "ip/system_util_vector_logic_0_0/system_util_vector_logic_0_0.xci",
+        "inst_hier_path": "util_vector_logic_0",
+        "parameters": {
+          "C_OPERATION": {
+            "value": "not"
+          },
+          "C_SIZE": {
+            "value": "1"
+          }
+        }
       }
     },
     "interface_nets": {
+      "marga_DDS0_PHASE_AXIS": {
+        "interface_ports": [
+          "marga/DDS0_PHASE_AXIS",
+          "tx_0/S_AXIS_PHASE"
+        ]
+      },
       "marga_DDS1_PHASE_AXIS": {
         "interface_ports": [
           "marga/DDS1_PHASE_AXIS",
@@ -3532,12 +3581,6 @@
         "interface_ports": [
           "dac_0/S_AXIS",
           "tx_0/M_AXIS"
-        ]
-      },
-      "marga_DDS0_PHASE_AXIS": {
-        "interface_ports": [
-          "marga/DDS0_PHASE_AXIS",
-          "tx_0/S_AXIS_PHASE"
         ]
       },
       "tx_0_M01_AXIS1": {
@@ -3744,14 +3787,14 @@
       },
       "exp_p_tri_io_i_1": {
         "ports": [
-          "exp_p_tri_io_i",
+          "exp_p_tri_i",
           "marga/fhdo_sdi_i"
         ]
       },
       "marga_rx_gate_o": {
         "ports": [
           "marga/rx_gate_o",
-          "trig_o"
+          "rx_gate_o"
         ]
       },
       "trig_i_1": {
@@ -3808,12 +3851,6 @@
           "util_ds_buf_0/OBUF_IN"
         ]
       },
-      "marga_rx1_axis_tready_o": {
-        "ports": [
-          "marga/rx1_axis_tready_o",
-          "xlslice_0/Din"
-        ]
-      },
       "xlslice_0_Dout": {
         "ports": [
           "xlslice_0/Dout",
@@ -3833,6 +3870,31 @@
             "value": "true"
           }
         }
+      },
+      "marga_leds_o": {
+        "ports": [
+          "marga/leds_o",
+          "xlslice_0/Din"
+        ]
+      },
+      "marga_trig_o": {
+        "ports": [
+          "marga/trig_o",
+          "trig_p_o",
+          "util_vector_logic_0/Op1",
+          "pio_concat_0/In2"
+        ]
+      },
+      "util_vector_logic_0_Res": {
+        "ports": [
+          "util_vector_logic_0/Res",
+          "trig_n_o"
+        ]
+      }
+    },
+    "comments": {
+      "/": {
+        "comment_0": "either trig_p or trig_n usable for slaves"
       }
     },
     "addressing": {
