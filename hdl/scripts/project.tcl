@@ -16,15 +16,17 @@ set bd_path tmp/$project_name.srcs/sources_1/bd/system
 create_bd_design system
 
 if {$part_variant=="Z20"} {
-	source cfg/ports_Z20.tcl
+    source cfg/ports_Z20.tcl
+    add_files -norecurse -fileset constrs_1 cfg/ports_Z20.xdc
+    add_files -norecurse -fileset constrs_1 cfg/debug_Z20.xdc
 } elseif {$part_variant=="Z10"} {
-	source cfg/ports_Z10.tcl
+    source cfg/ports_Z10.tcl
+    add_files -norecurse -fileset constrs_1 cfg/ports_Z10.xdc
+    add_files -norecurse -fileset constrs_1 cfg/debug_Z10.xdc
 } else {
 	puts "Error: Unknown part variant!"
 	exit 1
 }
-
-
 
 proc cell {cell_vlnv cell_name {cell_props {}} {cell_ports {}}} {
   set cell [create_bd_cell -type ip -vlnv $cell_vlnv $cell_name]
@@ -122,8 +124,6 @@ if {[llength $files] > 0} {
 }
 
 add_files -norecurse -fileset constrs_1 cfg/clocks.xdc
-add_files -norecurse -fileset constrs_1 cfg/ports_Z20.xdc
-#add_files -norecurse -fileset constrs_1 cfg/debug_Z20.xdc
 
 set_property VERILOG_DEFINE {TOOL_VIVADO} [current_fileset]
 

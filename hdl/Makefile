@@ -6,12 +6,24 @@
 LD_LIBRARY_PATH =
 
 NAME = marcos_fpga
+# invoke using 'make PART_VARIANT=Z20' or 'make PART_VARIANT=Z10'
+PART_VARIANT ?= Z20
+ifeq ($(PART_VARIANT), Z20)
 PART = xc7z020clg400-1
-PART_VARIANT = Z20  # can also be Z10, currently unsupported however
 HWNAME = stemlab_sdr
+ADCVER = v1_0
+else ifeq ($(PART_VARIANT), Z10)
+PART = xc7z010clg400-1
+HWNAME = red_pitaya
+ADCVER = v2_0
+else
+exit:
+	@echo "'"$(PART_VARIANT)"' not supported"
+	exit 1
+endif
 
 CORES_PAVEL = axi_cfg_register_v1_0 axis_constant_v1_0 \
-        axis_$(HWNAME)_adc_v1_0 axis_$(HWNAME)_dac_v1_0 \
+        axis_$(HWNAME)_adc_$(ADCVER) axis_$(HWNAME)_dac_v1_0 \
         axis_zeroer_v1_0 axis_variable_v1_0 axis_interpolator_v1_0 \
         axi_sts_register_v1_0
 
