@@ -1,9 +1,15 @@
 if {$part_variant=="Z20"} {
-	set adc_clk_freq 122.88
+    set adc_clk_freq 122.88
+    set adc_clk_freq_2x 245.76
+    set rx_fifo_length 16384
 } elseif {$part_variant=="Z10"} {
-	set adc_clk_freq 125
+    set adc_clk_freq 125
+    set adc_clk_freq_2x 250
+    set rx_fifo_length 4096
 }
 global adc_clk_freq
+global adc_clk_freq_2x
+global rx_fifo_length
 
 # Create clk_wiz
 cell xilinx.com:ip:clk_wiz pll_0 {
@@ -14,10 +20,10 @@ cell xilinx.com:ip:clk_wiz pll_0 {
   CLKOUT1_USED true
   CLKOUT1_REQUESTED_OUT_FREQ $adc_clk_freq
   CLKOUT2_USED true
-  CLKOUT2_REQUESTED_OUT_FREQ 245.76
+  CLKOUT2_REQUESTED_OUT_FREQ $adc_clk_freq_2x
   CLKOUT2_REQUESTED_PHASE -112.5
   CLKOUT3_USED true
-  CLKOUT3_REQUESTED_OUT_FREQ 245.76
+  CLKOUT3_REQUESTED_OUT_FREQ $adc_clk_freq_2x
   CLKOUT3_REQUESTED_PHASE -67.5
   USE_RESET false
 } {
@@ -110,7 +116,8 @@ cell xilinx.com:ip:axis_broadcaster:1.1 adc_ab {
 	aresetn /rst_0/peripheral_aresetn
 }
 
-cell open-mri:user:marga:1.0 marga {
+cell open-mri:user:marga:1.0.1 marga {
+    RX_FIFO_LENGTH $rx_fifo_length
 } {
   s0_axi_aclk pll_0/clk_out1
   s0_axi_aresetn rst_0/peripheral_aresetn
