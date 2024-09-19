@@ -12,11 +12,11 @@ file delete -force tmp/cores/$core_name tmp/cores/$project_name.cache tmp/cores/
 create_project -part $part_name $project_name tmp/cores
 
 if {[catch {glob cores/$core_name/*.v}]} {
-} else { 
+} else {
     add_files -norecurse [glob cores/$core_name/*.v]
 }
 if {[catch {glob cores/$core_name/*.sv}]} {
-} else { 
+} else {
     add_files -norecurse [glob cores/$core_name/*.sv]
 }
 
@@ -30,7 +30,7 @@ set_property NAME $project_name $core
 set_property LIBRARY {user} $core
 set_property VENDOR {open-mri} $core
 set_property VENDOR_DISPLAY_NAME {OpenMRI} $core
-set_property COMPANY_URL {https://openmri.github.io/ocra/} $core
+set_property COMPANY_URL {https://openmri.github.io/} $core
 set_property SUPPORTED_FAMILIES {zynq Production} $core
 
 proc core_parameter {name display_name description} {
