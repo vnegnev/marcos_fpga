@@ -116,7 +116,7 @@ cell xilinx.com:ip:axis_broadcaster:1.1 adc_ab {
 	aresetn /rst_0/peripheral_aresetn
 }
 
-cell open-mri:user:marga:1.0.1 marga {
+cell open-mri:user:marga:1.0 marga {
     RX_FIFO_LENGTH $rx_fifo_length
 } {
   s0_axi_aclk pll_0/clk_out1

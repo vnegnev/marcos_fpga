@@ -1,14 +1,14 @@
 set display_name {MARGA}
 
 set core [ipx::current_core]
-
 set_property DISPLAY_NAME $display_name $core
 set_property DESCRIPTION $display_name $core
 
 core_parameter C_S0_AXI_DATA_WIDTH {S0 AXI DATA WIDTH} {Width of the AXI data bus.}
 core_parameter C_S0_AXI_ADDR_WIDTH {S0 AXI ADDR WIDTH} {Width of the AXI address bus.}
+core_parameter RX_FIFO_LENGTH {RX FIFO LENGTH} {Length of the RX FIFOs.}
 
-#set_property file_type SystemVerilog [glob cores/$core_name/*.v]
+# set_property file_type SystemVerilog [glob cores/$core_name/*.v]
 set_property file_type SystemVerilog [get_files *.sv]
 
 set bus [ipx::get_bus_interfaces -of_objects $core dds0_phase_axis_o]
