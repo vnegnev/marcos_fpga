@@ -6,10 +6,15 @@ if {$part_variant=="Z20"} {
     set adc_clk_freq 125
     set adc_clk_freq_2x 250
     set rx_fifo_length 4096
+} else {
+    puts "Error: Unknown part variant!"
+    exit 1
 }
+
 global adc_clk_freq
 global adc_clk_freq_2x
 global rx_fifo_length
+global cic_source
 
 # Create clk_wiz
 cell xilinx.com:ip:clk_wiz pll_0 {

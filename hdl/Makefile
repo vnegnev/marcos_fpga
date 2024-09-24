@@ -8,6 +8,10 @@ LD_LIBRARY_PATH =
 NAME = marcos_fpga
 # invoke using 'make PART_VARIANT=Z20' or 'make PART_VARIANT=Z10'
 PART_VARIANT ?= Z20
+
+# invoke using make CIC_SOURCE=OPENSOURCE or make CIC_SOURCE=XILINX
+CIC_SOURCE ?= OPENSOURCE
+
 ifeq ($(PART_VARIANT), Z20)
 PART = xc7z020clg400-1
 HWNAME = stemlab_sdr
@@ -67,7 +71,7 @@ tmp/cores/%: cores/%/core_config.tcl $(cores/%/*.v)  $(cores_pavel/%/*.sv)
 
 tmp/%.xpr: projects/% $(addprefix tmp/cores_pavel/, $(CORES_PAVEL)) $(addprefix tmp/cores/, $(CORES))
 	mkdir -p $(@D)
-	$(VIVADO) -source scripts/project.tcl -tclargs $* $(PART) $(PART_VARIANT)
+	$(VIVADO) -source scripts/project.tcl -tclargs $* $(PART) $(PART_VARIANT) $(CIC_SOURCE)
 
 tmp/%.hdf: tmp/%.xpr
 	mkdir -p $(@D)

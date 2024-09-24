@@ -1,9 +1,7 @@
-
 set project_name [lindex $argv 0]
-
 set part_name [lindex $argv 1]
-
 set part_variant [lindex $argv 2]
+set cic_source [lindex $argv 3]
 
 file delete -force tmp/$project_name.cache tmp/$project_name.hw tmp/$project_name.srcs tmp/$project_name.runs tmp/$project_name.xpr
 
@@ -24,8 +22,8 @@ if {$part_variant=="Z20"} {
     add_files -norecurse -fileset constrs_1 cfg/ports_Z10.xdc
     add_files -norecurse -fileset constrs_1 cfg/debug_Z10.xdc
 } else {
-	puts "Error: Unknown part variant!"
-	exit 1
+    puts "Error: Unknown part variant!"
+    exit 1
 }
 
 proc cell {cell_vlnv cell_name {cell_props {}} {cell_ports {}}} {

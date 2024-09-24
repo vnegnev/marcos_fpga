@@ -1,5 +1,3 @@
-
-
 cell open-mri:user:complex_multiplier:1.0 mult_0 {
   OPERAND_WIDTH_A 16
   OPERAND_WIDTH_B 16
