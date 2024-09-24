@@ -1,18 +1,19 @@
-# Invoke using e.g. 'make PART_VARIANT=Z20 CIC_SOURCE=OPENSOURCE -j6
+# Invoke using e.g. 'make PART_VARIANT=Z20 DSP_SOURCE=OPENSOURCE -j6
 #
 # PART_VARIANT can be Z20 for RP-122 and Z10 for RP-125. Default: Z20 - the
 # MaRCoS project does not officially support Z10 although it's feature-complete
 # with smaller RX buffers.
 #
-# CIC_SOURCE can be OPENSOURCE to use Benjamin Menkuec's open-source CIC core,
-# or XILINX to use the Xilinx CIC compiler IP. Default: OPENSOURCE. Note:
-# open-source core uses more resources on Z10 (not yet debugged)
+# DSP_SOURCE can be OPENSOURCE to use Benjamin Menkuec's open-source DDS and
+# CIC cores, or XILINX to use the Xilinx DDS compiler and CIC compiler
+# IPs. Default: OPENSOURCE. Note: open-source cores use more resources on Z10
+# (cause not yet debugged)
 #
 # -jX chooses the number of threads. (optional)
 #
 # Examples
 #
-# make  : equivalent to make PART_VARIANT=Z20 CIC_SOURCE=OPENSOURCE
+# make  : equivalent to make PART_VARIANT=Z20 DSP_SOURCE=OPENSOURCE
 # make PART_VARIANT=Z10
 
 # 'make' builds everything for
@@ -20,12 +21,12 @@
 #
 # invoke using 'make PART_VARIANT=Z20' or 'make PART_VARIANT=Z10'
 #
-# invoke using make CIC_SOURCE=OPENSOURCE or make CIC_SOURCE=XILINX
+# invoke using make DSP_SOURCE=OPENSOURCE or make DSP_SOURCE=XILINX
 
 LD_LIBRARY_PATH =
 NAME = marcos_fpga
 PART_VARIANT ?= Z20
-CIC_SOURCE ?= OPENSOURCE
+DSP_SOURCE ?= OPENSOURCE
 
 ifeq ($(PART_VARIANT), Z20)
 PART = xc7z020clg400-1
@@ -86,7 +87,7 @@ tmp/cores/%: cores/%/core_config.tcl $(cores/%/*.v)  $(cores_pavel/%/*.sv)
 
 tmp/%.xpr: projects/% $(addprefix tmp/cores_pavel/, $(CORES_PAVEL)) $(addprefix tmp/cores/, $(CORES))
 	mkdir -p $(@D)
-	$(VIVADO) -source scripts/project.tcl -tclargs $* $(PART) $(PART_VARIANT) $(CIC_SOURCE)
+	$(VIVADO) -source scripts/project.tcl -tclargs $* $(PART) $(PART_VARIANT) $(DSP_SOURCE)
 
 tmp/%.hdf: tmp/%.xpr
 	mkdir -p $(@D)

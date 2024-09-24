@@ -14,40 +14,40 @@ if {$part_variant=="Z20"} {
 global adc_clk_freq
 global adc_clk_freq_2x
 global rx_fifo_length
-global cic_source
+global dsp_source
 
 # Create clk_wiz
 cell xilinx.com:ip:clk_wiz pll_0 {
-  PRIMITIVE PLL
-  PRIM_IN_FREQ.VALUE_SRC USER
-  PRIM_IN_FREQ $adc_clk_freq
-  PRIM_SOURCE Differential_clock_capable_pin
-  CLKOUT1_USED true
-  CLKOUT1_REQUESTED_OUT_FREQ $adc_clk_freq
-  CLKOUT2_USED true
-  CLKOUT2_REQUESTED_OUT_FREQ $adc_clk_freq_2x
-  CLKOUT2_REQUESTED_PHASE -112.5
-  CLKOUT3_USED true
-  CLKOUT3_REQUESTED_OUT_FREQ $adc_clk_freq_2x
-  CLKOUT3_REQUESTED_PHASE -67.5
-  USE_RESET false
+    PRIMITIVE PLL
+    PRIM_IN_FREQ.VALUE_SRC USER
+    PRIM_IN_FREQ $adc_clk_freq
+    PRIM_SOURCE Differential_clock_capable_pin
+    CLKOUT1_USED true
+    CLKOUT1_REQUESTED_OUT_FREQ $adc_clk_freq
+    CLKOUT2_USED true
+    CLKOUT2_REQUESTED_OUT_FREQ $adc_clk_freq_2x
+    CLKOUT2_REQUESTED_PHASE -112.5
+    CLKOUT3_USED true
+    CLKOUT3_REQUESTED_OUT_FREQ $adc_clk_freq_2x
+    CLKOUT3_REQUESTED_PHASE -67.5
+    USE_RESET false
 } {
-  clk_in1_p adc_clk_p_i
-  clk_in1_n adc_clk_n_i
+    clk_in1_p adc_clk_p_i
+    clk_in1_n adc_clk_n_i
 }
 
 # Create processing_system7
 cell xilinx.com:ip:processing_system7 ps_0 {
-  PCW_IMPORT_BOARD_PRESET cfg/stemlab_sdr.xml
+    PCW_IMPORT_BOARD_PRESET cfg/stemlab_sdr.xml
 } {
-  M_AXI_GP0_ACLK pll_0/clk_out1
+    M_AXI_GP0_ACLK pll_0/clk_out1
 }
 
 # Create all required interconnections
 apply_bd_automation -rule xilinx.com:bd_rule:processing_system7 -config {
-  make_external {FIXED_IO, DDR}
-  Master Disable
-  Slave Disable
+    make_external {FIXED_IO, DDR}
+    Master Disable
+    Slave Disable
 } [get_bd_cells ps_0]
 
 
@@ -60,72 +60,72 @@ cell xilinx.com:ip:xlconstant const_0
 
 # ADC
 if {$part_variant=="Z20"} {
-	# Create axis_stemlab_sdr_adc
-	cell pavel-demin:user:axis_stemlab_sdr_adc adc_0 {
-	  ADC_DATA_WIDTH 16
-	} {
-	  aclk pll_0/clk_out1
-	  adc_dat_a adc_dat_a_i
-	  adc_dat_b adc_dat_b_i
-	  adc_csn adc_csn_o
-	}
+    # Create axis_stemlab_sdr_adc
+    cell pavel-demin:user:axis_stemlab_sdr_adc adc_0 {
+	ADC_DATA_WIDTH 16
+    } {
+	aclk pll_0/clk_out1
+	adc_dat_a adc_dat_a_i
+	adc_dat_b adc_dat_b_i
+	adc_csn adc_csn_o
+    }
 
-	# Create axis_stemlab_sdr_dac
-	cell pavel-demin:user:axis_stemlab_sdr_dac dac_0 {
-	  DAC_DATA_WIDTH 14
-	} {
-	  aclk pll_0/clk_out1
-	  ddr_clk pll_0/clk_out2
-	  wrt_clk pll_0/clk_out3
-	  locked pll_0/locked
-	  dac_clk dac_clk_o
-	  dac_rst dac_rst_o
-	  dac_sel dac_sel_o
-	  dac_wrt dac_wrt_o
-	  dac_dat dac_dat_o
-	  s_axis_tvalid const_0/dout
-	}
+    # Create axis_stemlab_sdr_dac
+    cell pavel-demin:user:axis_stemlab_sdr_dac dac_0 {
+	DAC_DATA_WIDTH 14
+    } {
+	aclk pll_0/clk_out1
+	ddr_clk pll_0/clk_out2
+	wrt_clk pll_0/clk_out3
+	locked pll_0/locked
+	dac_clk dac_clk_o
+	dac_rst dac_rst_o
+	dac_sel dac_sel_o
+	dac_wrt dac_wrt_o
+	dac_dat dac_dat_o
+	s_axis_tvalid const_0/dout
+    }
 } elseif {$part_variant=="Z10"} {
-	# Create axis_red_pitaya_adc
-	cell pavel-demin:user:axis_red_pitaya_adc:2.0 adc_0 {} {
-	  aclk pll_0/clk_out1
-	  adc_dat_a adc_dat_a_i
-	  adc_dat_b adc_dat_b_i
-	  adc_csn adc_csn_o
-	}
+    # Create axis_red_pitaya_adc
+    cell pavel-demin:user:axis_red_pitaya_adc:2.0 adc_0 {} {
+	aclk pll_0/clk_out1
+	adc_dat_a adc_dat_a_i
+	adc_dat_b adc_dat_b_i
+	adc_csn adc_csn_o
+    }
 
-	# Create axis_red_pitaya_dac
-	cell pavel-demin:user:axis_red_pitaya_dac:1.0 dac_0 {} {
-	  aclk pll_0/clk_out1
-	  ddr_clk pll_0/clk_out2
-	  locked pll_0/locked
-	  dac_clk dac_clk_o
-	  dac_rst dac_rst_o
-	  dac_sel dac_sel_o
-	  dac_wrt dac_wrt_o
-	  dac_dat dac_dat_o
-	}
+    # Create axis_red_pitaya_dac
+    cell pavel-demin:user:axis_red_pitaya_dac:1.0 dac_0 {} {
+	aclk pll_0/clk_out1
+	ddr_clk pll_0/clk_out2
+	locked pll_0/locked
+	dac_clk dac_clk_o
+	dac_rst dac_rst_o
+	dac_sel dac_sel_o
+	dac_wrt dac_wrt_o
+	dac_dat dac_dat_o
+    }
 }
 
 cell xilinx.com:ip:axis_broadcaster:1.1 adc_ab {
-  S_TDATA_NUM_BYTES.VALUE_SRC USER
-  M_TDATA_NUM_BYTES.VALUE_SRC USER
-  S_TDATA_NUM_BYTES 4
-  M_TDATA_NUM_BYTES 2
-  M00_TDATA_REMAP {tdata[15:0]}
-  M01_TDATA_REMAP {tdata[31:16]}
-  HAS_TREADY 0
+    S_TDATA_NUM_BYTES.VALUE_SRC USER
+    M_TDATA_NUM_BYTES.VALUE_SRC USER
+    S_TDATA_NUM_BYTES 4
+    M_TDATA_NUM_BYTES 2
+    M00_TDATA_REMAP {tdata[15:0]}
+    M01_TDATA_REMAP {tdata[31:16]}
+    HAS_TREADY 0
 } {
     S_AXIS adc_0/M_AXIS
-	aclk /pll_0/clk_out1
-	aresetn /rst_0/peripheral_aresetn
+    aclk /pll_0/clk_out1
+    aresetn /rst_0/peripheral_aresetn
 }
 
 cell open-mri:user:marga:1.0 marga {
     RX_FIFO_LENGTH $rx_fifo_length
 } {
-  s0_axi_aclk pll_0/clk_out1
-  s0_axi_aresetn rst_0/peripheral_aresetn
+    s0_axi_aclk pll_0/clk_out1
+    s0_axi_aresetn rst_0/peripheral_aresetn
 }
 apply_bd_automation -rule xilinx.com:bd_rule:axi4 -config {
     Master {/ps_0/M_AXI_GP0}
@@ -136,7 +136,7 @@ set_property RANGE 512K [get_bd_addr_segs ps_0/Data/SEG_marga_reg0]
 set_property OFFSET 0x43C00000 [get_bd_addr_segs ps_0/Data/SEG_marga_reg0]
 
 module rx_0 {
-  source projects/marcos_fpga/rx.tcl
+    source projects/marcos_fpga/rx.tcl
 } {
     S_AXIS_ADC adc_ab/M00_AXIS
     comb_iqmerge/M_AXIS marga/RX0_AXIS
@@ -146,7 +146,7 @@ module rx_0 {
 }
 
 module rx_1 {
-  source projects/marcos_fpga/rx.tcl
+    source projects/marcos_fpga/rx.tcl
 } {
     S_AXIS_ADC adc_ab/M01_AXIS
     comb_iqmerge/M_AXIS marga/RX1_AXIS
@@ -155,12 +155,22 @@ module rx_1 {
     rx_aresetn marga/rx1_rst_n_o
 }
 
-module tx_0 {
-  source projects/marcos_fpga/tx.tcl
-} {
-    bcast_nco0/M01_AXIS marga/DDS0_IQ_AXIS
-    bcast_nco1/M01_AXIS marga/DDS1_IQ_AXIS
-    tx2_nco/M_AXIS_DATA marga/DDS2_IQ_AXIS
+if {$dsp_source=="OPENSOURCE"} {
+    module tx_0 {
+	source projects/marcos_fpga/tx.tcl
+    } {
+	bcast_nco0/M01_AXIS marga/DDS0_IQ_AXIS
+	bcast_nco1/M01_AXIS marga/DDS1_IQ_AXIS
+	tx2_nco/M_AXIS_OUT marga/DDS2_IQ_AXIS
+    }
+} elseif {$dsp_source=="XILINX"} {
+    module tx_0 {
+	source projects/marcos_fpga/tx.tcl
+    } {
+	bcast_nco0/M01_AXIS marga/DDS0_IQ_AXIS
+	bcast_nco1/M01_AXIS marga/DDS1_IQ_AXIS
+	tx2_nco/M_AXIS_DATA marga/DDS2_IQ_AXIS
+    }
 }
 
 
@@ -174,13 +184,13 @@ connect_bd_net [get_bd_ports led_o] [get_bd_pins marga/leds_o]
 cell xilinx.com:ip:xlconcat:2.1 spi_concat_0 {
     NUM_PORTS 7
 } {
-	In0 marga/ocra1_clk_o
-	In1 marga/ocra1_syncn_o
-	In2 marga/ocra1_ldacn_o
-	In3 marga/ocra1_sdox_o
-	In4	marga/ocra1_sdoy_o
-	In5 marga/ocra1_sdoz_o
-	In6 marga/ocra1_sdoz2_o
+    In0 marga/ocra1_clk_o
+    In1 marga/ocra1_syncn_o
+    In2 marga/ocra1_ldacn_o
+    In3 marga/ocra1_sdox_o
+    In4	marga/ocra1_sdoy_o
+    In5 marga/ocra1_sdoz_o
+    In6 marga/ocra1_sdoz2_o
 }
 
 # Delete input/output port
@@ -195,9 +205,9 @@ create_bd_port -dir I -type data exp_p_tri_io_i
 cell xilinx.com:ip:xlconcat:2.1 pio_concat_0 {
     NUM_PORTS 6
 } {
-	In3 marga/fhdo_clk_o
-	In4 marga/fhdo_ssn_o
-	In5 marga/fhdo_sdo_o
+    In3 marga/fhdo_clk_o
+    In4 marga/fhdo_ssn_o
+    In5 marga/fhdo_sdo_o
 }
 
 cell xilinx.com:ip:xlconcat:2.1 nio_concat_0 {
