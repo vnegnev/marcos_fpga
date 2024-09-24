@@ -1,7 +1,7 @@
 set project_name [lindex $argv 0]
 set part_name [lindex $argv 1]
 set part_variant [lindex $argv 2]
-set cic_source [lindex $argv 3]
+set dsp_source [lindex $argv 3]
 
 file delete -force tmp/$project_name.cache tmp/$project_name.hw tmp/$project_name.srcs tmp/$project_name.runs tmp/$project_name.xpr
 

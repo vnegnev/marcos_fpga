@@ -1,4 +1,4 @@
-global cic_source
+global dsp_source
 create_bd_intf_pin -mode Slave -vlnv xilinx.com:interface:axis_rtl:1.0 S_AXIS_ADC
 create_bd_intf_pin -mode Slave -vlnv xilinx.com:interface:axis_rtl:1.0 S_AXIS_DDS_IQ
 create_bd_intf_pin -mode Slave -vlnv xilinx.com:interface:axis_rtl:1.0 S_AXIS_RX_RATE
@@ -59,7 +59,7 @@ cell xilinx.com:ip:axis_broadcaster:1.1 rate {
     aresetn rx_aresetn
 }
 
-if {$cic_source=="OPENSOURCE"} {
+if {$dsp_source=="OPENSOURCE"} {
     cell open-mri:user:CIC:1.0 cic_real {
 	INP_DW 32
 	OUT_DW 32
@@ -105,7 +105,7 @@ if {$cic_source=="OPENSOURCE"} {
 	aclk /pll_0/clk_out1
 	aresetn rx_aresetn
     }
-} elseif {$cic_source=="XILINX"} {
+} elseif {$dsp_source=="XILINX"} {
     cell xilinx.com:ip:cic_compiler:4.0 cic_real {
 	INPUT_DATA_WIDTH.VALUE_SRC USER
 	FILTER_TYPE Decimation
