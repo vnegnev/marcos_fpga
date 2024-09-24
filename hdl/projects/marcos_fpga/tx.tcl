@@ -112,7 +112,7 @@ if {$dsp_source=="OPENSOURCE"} {
 	NEGATIVE_SINE 1
     } {
 	clk /pll_0/clk_out1
-	S_AXIS_PHASE /marga/DDS1_PHASE_AXIS
+	S_AXIS_PHASE /marga/DDS2_PHASE_AXIS
 	reset_n /rst_0/peripheral_aresetn
     }
 

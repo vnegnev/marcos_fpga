@@ -2,18 +2,22 @@ if {$part_variant=="Z20"} {
     set adc_clk_freq 122.88
     set adc_clk_freq_2x 245.76
     set rx_fifo_length 16384
+    set marga_addr_width 19
 } elseif {$part_variant=="Z10"} {
     set adc_clk_freq 125
     set adc_clk_freq_2x 250
-    set rx_fifo_length 2048
+    set rx_fifo_length 8192
+    set marga_addr_width 18
 } else {
     puts "Error: Unknown part variant!"
     exit 1
 }
 
+# probably don't need to be globals except rx_fifo_length
 global adc_clk_freq
 global adc_clk_freq_2x
 global rx_fifo_length
+global marga_addr_width
 global dsp_source
 
 # Create clk_wiz
@@ -123,6 +127,7 @@ cell xilinx.com:ip:axis_broadcaster:1.1 adc_ab {
 
 cell open-mri:user:marga:1.0 marga {
     RX_FIFO_LENGTH $rx_fifo_length
+    C_S0_AXI_ADDR_WIDTH $marga_addr_width
 } {
     s0_axi_aclk pll_0/clk_out1
     s0_axi_aresetn rst_0/peripheral_aresetn
