@@ -1,15 +1,30 @@
-# 'make' builds everything
+# Invoke using e.g. 'make PART_VARIANT=Z20 CIC_SOURCE=OPENSOURCE -j6
+#
+# PART_VARIANT can be Z20 for RP-122 and Z10 for RP-125. Default: Z20 - the
+# MaRCoS project does not officially support Z10 although it's feature-complete
+# with smaller RX buffers.
+#
+# CIC_SOURCE can be OPENSOURCE to use Benjamin Menkuec's open-source CIC core,
+# or XILINX to use the Xilinx CIC compiler IP. Default: OPENSOURCE. Note:
+# open-source core uses more resources on Z10 (not yet debugged)
+#
+# -jX chooses the number of threads. (optional)
+#
+# Examples
+#
+# make  : equivalent to make PART_VARIANT=Z20 CIC_SOURCE=OPENSOURCE
+# make PART_VARIANT=Z10
+
+# 'make' builds everything for
 # 'make clean' deletes everything except source files and Makefile
 #
-# You need to set NAME, PART and PROC for your project.
-# NAME is the base name for most of the generated files.
-LD_LIBRARY_PATH =
-
-NAME = marcos_fpga
 # invoke using 'make PART_VARIANT=Z20' or 'make PART_VARIANT=Z10'
-PART_VARIANT ?= Z20
-
+#
 # invoke using make CIC_SOURCE=OPENSOURCE or make CIC_SOURCE=XILINX
+
+LD_LIBRARY_PATH =
+NAME = marcos_fpga
+PART_VARIANT ?= Z20
 CIC_SOURCE ?= OPENSOURCE
 
 ifeq ($(PART_VARIANT), Z20)
