@@ -5,7 +5,7 @@ if {$part_variant=="Z20"} {
 } elseif {$part_variant=="Z10"} {
     set adc_clk_freq 125
     set adc_clk_freq_2x 250
-    set rx_fifo_length 4096
+    set rx_fifo_length 2048
 } else {
     puts "Error: Unknown part variant!"
     exit 1
