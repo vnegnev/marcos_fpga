@@ -109,6 +109,9 @@ if {$part_variant=="Z20"} {
 	dac_wrt dac_wrt_o
 	dac_dat dac_dat_o
     }
+} else {
+    puts "Error: Unknown part variant!"
+    exit 1
 }
 
 cell xilinx.com:ip:axis_broadcaster:1.1 adc_ab {
@@ -221,12 +224,22 @@ cell xilinx.com:ip:xlconcat:2.1 nio_concat_0 {
 connect_bd_net [get_bd_pins nio_concat_0/In0] [get_bd_pins spi_concat_0/dout]
 connect_bd_net [get_bd_pins nio_concat_0/In1] [get_bd_pins marga/tx_gate_o]
 
-create_bd_port -dir I -type data trig_i
-create_bd_port -dir O -type data trig_o
-
 # connect to pins
 connect_bd_net [get_bd_pins exp_p_tri_io_i] [get_bd_pins marga/fhdo_sdi_i]
-connect_bd_net [get_bd_ports trig_o] [get_bd_pins marga/rx_gate_o]
-connect_bd_net [get_bd_ports trig_i] [get_bd_pins marga/trig_i]
 connect_bd_net [get_bd_pins exp_n_tri_io] [get_bd_pins nio_concat_0/Dout]
 connect_bd_net [get_bd_pins exp_p_tri_io] [get_bd_pins pio_concat_0/Dout]
+
+if {$part_variant=="Z20"} {
+    create_bd_port -dir I -type data trig_i
+    create_bd_port -dir O -type data trig_o
+    connect_bd_net [get_bd_ports trig_i] [get_bd_pins marga/trig_i]
+    # 'RX gate' MaRGA output is connected to trig_o port, trig_o MaRGA output is disconnected
+    connect_bd_net [get_bd_ports trig_o] [get_bd_pins marga/rx_gate_o]
+} elseif {$part_variant=="Z10"} {
+    # Not enough pins on Z10 for trigger input/output; set MaRGA trigger input
+    # to a constant
+    connect_bd_net [get_bd_pins const_0/dout] [get_bd_pins marga/trig_i]
+} else {
+    puts "Error: Unknown part variant!"
+    exit 1
+}
