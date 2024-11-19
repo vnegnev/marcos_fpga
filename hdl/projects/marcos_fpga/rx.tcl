@@ -15,7 +15,7 @@ cell xilinx.com:ip:axis_subset_converter:1.1 real_selector {
 	aclk /pll_0/clk_out1
 	aresetn /rst_0/peripheral_aresetn
 }
-
+if {$dsp_source=="OPENSOURCE"} {
 cell open-mri:user:complex_multiplier:1.0 mult_0 {
   OPERAND_WIDTH_A 16
   OPERAND_WIDTH_B 16
@@ -28,6 +28,19 @@ cell open-mri:user:complex_multiplier:1.0 mult_0 {
     S_AXIS_B S_AXIS_DDS_IQ
 	aclk /pll_0/clk_out1
 	aresetn rx_aresetn
+}
+} elseif {$dsp_source=="XILINX"} {
+cell xilinx.com:ip:cmpy:6.0 mult_0 {
+    ARESETN false
+    FlowControl NonBlocking
+    MinimumLatency 6
+    OutputWidth 32
+    RoundMode Truncate
+} {
+    S_AXIS_A real_selector/M_AXIS
+    S_AXIS_B S_AXIS_DDS_IQ
+    aclk /pll_0/clk_out1
+}
 }
 
 # Create axis_broadcaster
