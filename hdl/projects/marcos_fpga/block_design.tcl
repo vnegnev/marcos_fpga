@@ -233,6 +233,8 @@ cell xilinx.com:ip:xlconcat:2.1 pio_concat_0 {
     In5 marga/fhdo_sdo_o
 }
 
+connect_bd_net [get_bd_pins exp_p_tri_io_i] [get_bd_pins marga/fhdo_sdi_i]
+
 cell xilinx.com:ip:xlconcat:2.1 nio_concat_0 {
     NUM_PORTS 2
 }
@@ -242,8 +244,18 @@ connect_bd_net [get_bd_pins nio_concat_0/In1] [get_bd_pins marga/tx_gate_o]
 create_bd_port -dir O -type data rx_gate_o
 connect_bd_net [get_bd_ports rx_gate_o] [get_bd_pins marga/rx_gate_o]
 
-# connect to pins
-connect_bd_net [get_bd_pins exp_p_tri_io_i] [get_bd_pins marga/fhdo_sdi_i]
+# clock forward
+cell xilinx.com:ip:oddr:1.0 oddr_0
+connect_bd_net [get_bd_pins pll_0/clk_out1] [get_bd_pins oddr_0/clk_in]
+
+cell xilinx.com:ip:util_ds_buf:2.1 ext_clk_0_buf {
+    C_BUF_TYPE OBUFDS
+}
+create_bd_port -dir O -type clk ext_clk_0_p_o
+create_bd_port -dir O -type clk ext_clk_0_n_o
+connect_bd_net [get_bd_pins oddr_0/clk_out] [get_bd_pins ext_clk_0_buf/OBUF_IN]
+connect_bd_net [get_bd_pins ext_clk_0_buf/OBUF_DS_P] [get_bd_ports ext_clk_0_p_o]
+connect_bd_net [get_bd_pins ext_clk_0_buf/OBUF_DS_N] [get_bd_ports ext_clk_0_n_o]
 
 create_bd_port -dir I -type data trig_i
 connect_bd_net [get_bd_ports trig_i] [get_bd_pins marga/trig_i]

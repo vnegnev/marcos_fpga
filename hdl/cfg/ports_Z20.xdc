@@ -192,29 +192,26 @@ set_property PACKAGE_PIN Y8 [get_ports trig_i]
 
 ### SATA connector
 
-set_property IOSTANDARD DIFF_HSTL_I_18 [get_ports {ext_clk_p_o[0]}]
-set_property IOSTANDARD DIFF_HSTL_I_18 [get_ports {ext_clk_n_o[0]}]
-
-set_property PACKAGE_PIN T12 [get_ports {ext_clk_p_o[0]}]
-set_property PACKAGE_PIN U12 [get_ports {ext_clk_n_o[0]}]
-
+set_property IOSTANDARD DIFF_HSTL_I_18 [get_ports {ext_clk_0_p_o[0]}]
+set_property IOSTANDARD DIFF_HSTL_I_18 [get_ports {ext_clk_0_n_o[0]}]
 #set_property IOSTANDARD DIFF_HSTL_I_18 [get_ports daisy_p_o[*]]
 #set_property IOSTANDARD DIFF_HSTL_I_18 [get_ports daisy_n_o[*]]
+
+set_property PACKAGE_PIN T12 [get_ports {ext_clk_0_p_o[0]}]
+set_property PACKAGE_PIN U12 [get_ports {ext_clk_0_n_o[0]}]
+# set_property PACKAGE_PIN T12 [get_ports {daisy_p_o[0]}]
+# set_property PACKAGE_PIN U12 [get_ports {daisy_n_o[0]}]
 
 ## TODO check and adjust voltage, drive strength + slew rate
 set_property IOSTANDARD LVCMOS18 [get_ports trig_p_o]
 set_property IOSTANDARD LVCMOS18 [get_ports trig_n_o]
 set_property PACKAGE_PIN U14 [get_ports {trig_p_o}]
 set_property PACKAGE_PIN U15 [get_ports {trig_n_o}]
+# set_property PACKAGE_PIN U14 [get_ports {daisy_p_o[1]}]
+# set_property PACKAGE_PIN U15 [get_ports {daisy_n_o[1]}]
 
 set_property IOSTANDARD DIFF_HSTL_I_18 [get_ports daisy_p_i[*]]
 set_property IOSTANDARD DIFF_HSTL_I_18 [get_ports daisy_n_i[*]]
-
-set_property PACKAGE_PIN T12 [get_ports {daisy_p_o[0]}]
-set_property PACKAGE_PIN U12 [get_ports {daisy_n_o[0]}]
-
-set_property PACKAGE_PIN U14 [get_ports {daisy_p_o[1]}]
-set_property PACKAGE_PIN U15 [get_ports {daisy_n_o[1]}]
 
 set_property PACKAGE_PIN P14 [get_ports {daisy_p_i[0]}]
 set_property PACKAGE_PIN R14 [get_ports {daisy_n_i[0]}]
