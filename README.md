@@ -21,7 +21,8 @@ To compile the HDL sources do: (not necessary if bit files from marcos_extras ar
 - install Vivado + Vitis on Linux (at least 2020.2)
 - cd into the hdl folder
 - Run `. /opt/Xilinx/Vitis/2020.2/settings64.sh`
-- type "make -j4", this will create .bit, .bin and .dtbo files for the fpga inside the `hdl/tmp` folder (change 4 to number of processes you want to run in parallel)
+- type "make", this will create .bit, .bin and .dtbo files for the fpga inside the `hdl/tmp` folder. Note that currently (20/11/2024) running multithreaded (i.e. "make -j4" etc) may lead to bugs or failures to compile.
+- To select different options such as the target or the use of open-source cores, read the top of `hdl/Makefile` for instructions.
 
 To run the loopback test do:
 - go into marcos_extras

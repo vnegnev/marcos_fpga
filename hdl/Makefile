@@ -1,32 +1,31 @@
-# Invoke using e.g. 'make PART_VARIANT=Z20 DSP_SOURCE=OPENSOURCE -j6
+# Invoke using e.g. 'make PART_VARIANT=Z20 DSP_SOURCE=OPENSOURCE
 #
 # PART_VARIANT can be Z20 for RP-122 and Z10 for RP-125. Default: Z20 - the
 # MaRCoS project does not officially support Z10 although it's feature-complete
 # with smaller RX buffers.
 #
-# DSP_SOURCE can be OPENSOURCE to use Benjamin Menkuec's open-source DDS and
-# CIC cores, or XILINX to use the Xilinx DDS compiler and CIC compiler
-# IPs. Default: OPENSOURCE. Note: open-source cores use more resources on Z10
-# (cause not yet debugged)
+# DSP_SOURCE can be OPENSOURCE to use Benjamin Menkuec's open-source DDS and CIC
+# cores, or XILINX to use the Xilinx DDS compiler and CIC compiler IPs. Default:
+# OPENSOURCE. If you use the OPENSOURCE cores, minor changes to marcos_client
+# are needed for compatibility with the open-source CIC core.
 #
-# -jX chooses the number of threads. (optional)
+# Note: open-source cores use more resources on Z10 (the cause is not yet
+# debugged)
 #
 # Examples
 #
-# make  : equivalent to make PART_VARIANT=Z20 DSP_SOURCE=OPENSOURCE
-# make PART_VARIANT=Z10
-
-# 'make' builds everything for
-# 'make clean' deletes everything except source files and Makefile
+# 'make' : equivalent to make PART_VARIANT=Z20 DSP_SOURCE=OPENSOURCE
 #
-# invoke using 'make PART_VARIANT=Z20' or 'make PART_VARIANT=Z10'
+# 'make PART_VARIANT=Z10' : equivalent to make PART_VARIANT=Z10 DSP_SOURCE=OPENSOURCE
 #
-# invoke using make DSP_SOURCE=OPENSOURCE or make DSP_SOURCE=XILINX
+# 'make DSP_SOURCE=XILINX'
+#
+# 'make clean' : deletes the `tmp` folder and other temporary files
 
 LD_LIBRARY_PATH =
 NAME = marcos_fpga
 PART_VARIANT ?= Z20
-DSP_SOURCE ?= XILINX
+DSP_SOURCE ?= OPENSOURCE
 
 ifeq ($(PART_VARIANT), Z20)
 PART = xc7z020clg400-1
