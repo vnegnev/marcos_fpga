@@ -277,8 +277,9 @@ cell xilinx.com:ip:xlconcat:2.1 nio_concat_0 {
 connect_bd_net [get_bd_pins nio_concat_0/In0] [get_bd_pins spi_concat_0/dout]
 connect_bd_net [get_bd_pins nio_concat_0/In1] [get_bd_pins marga/tx_gate_o]
 
-create_bd_port -dir O -type data rx_gate_o
-connect_bd_net [get_bd_ports rx_gate_o] [get_bd_pins marga/rx_gate_o]
+# trigger output
+create_bd_port -dir O -type data trig_p_o
+connect_bd_net [get_bd_pins marga/trig_o] [get_bd_ports trig_p_o]
 
 # clock forward
 cell xilinx.com:ip:oddr:1.0 oddr_0
@@ -293,16 +294,20 @@ connect_bd_net [get_bd_pins oddr_0/clk_out] [get_bd_pins ext_clk_0_buf/OBUF_IN]
 connect_bd_net [get_bd_pins ext_clk_0_buf/OBUF_DS_P] [get_bd_ports ext_clk_0_p_o]
 connect_bd_net [get_bd_pins ext_clk_0_buf/OBUF_DS_N] [get_bd_ports ext_clk_0_n_o]
 
-create_bd_port -dir I -type data trig_i
-connect_bd_net [get_bd_ports trig_i] [get_bd_pins marga/trig_i]
 connect_bd_net [get_bd_pins exp_n_tri_io] [get_bd_pins nio_concat_0/Dout]
 connect_bd_net [get_bd_pins exp_p_tri_io] [get_bd_pins pio_concat_0/Dout]
 
 if {$part_variant=="Z20"} {
-    create_bd_port -dir O -type data trig_p_o
-    connect_bd_net [get_bd_pins marga/trig_o] [get_bd_ports trig_p_o]
+    create_bd_port -dir O -type data rx_gate_o
+    connect_bd_net [get_bd_ports rx_gate_o] [get_bd_pins marga/rx_gate_o]
+
+    create_bd_port -dir I -type data trig_i
+    connect_bd_net [get_bd_ports trig_i] [get_bd_pins marga/trig_i]
+
 } elseif {$part_variant=="Z10"} {
-    # Not enough pins on Z10 for trigger output
+    # Not enough pins on Z10 for trigger input (TODO: add trig_i elsewhere so
+    # that both Z10 and Z20 can be externally triggered)
+    connect_bd_net [get_bd_pins const_0/dout] [get_bd_pins marga/trig_i]
 } else {
     puts "** ERROR: Unknown part variant '$part_variant'!"
     exit 1
