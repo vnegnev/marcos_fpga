@@ -3,7 +3,11 @@ if {$part_variant=="Z20"} {
     set adc_clk_freq_2x 245.76
     set rx_fifo_length 16384
     set marga_addr_width 19
+    create_bd_port -dir I -from 15 -to 0 adc_dat_a_i
+    create_bd_port -dir I -from 15 -to 0 adc_dat_b_i
 } elseif {$part_variant=="Z10"} {
+    create_bd_port -dir I -from 13 -to 0 adc_dat_a_i
+    create_bd_port -dir I -from 13 -to 0 adc_dat_b_i
     set adc_clk_freq 125
     set adc_clk_freq_2x 250
     set rx_fifo_length 8192
@@ -19,6 +23,40 @@ global adc_clk_freq_2x
 global rx_fifo_length
 global marga_addr_width
 global dsp_source
+
+# I/O ports
+create_bd_port -dir I adc_clk_p_i
+create_bd_port -dir I adc_clk_n_i
+
+create_bd_port -dir O adc_enc_p_o
+create_bd_port -dir O adc_enc_n_o
+
+create_bd_port -dir O adc_csn_o
+
+### DAC
+
+create_bd_port -dir O -from 13 -to 0 dac_dat_o
+
+create_bd_port -dir O dac_clk_o
+create_bd_port -dir O dac_rst_o
+create_bd_port -dir O dac_sel_o
+create_bd_port -dir O dac_wrt_o
+
+### PWM
+
+create_bd_port -dir O -from 3 -to 0 dac_pwm_o
+
+### XADC
+
+create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:diff_analog_io_rtl:1.0 Vp_Vn
+create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:diff_analog_io_rtl:1.0 Vaux0
+create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:diff_analog_io_rtl:1.0 Vaux1
+create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:diff_analog_io_rtl:1.0 Vaux9
+create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:diff_analog_io_rtl:1.0 Vaux8
+
+### LED
+
+create_bd_port -dir O -from 7 -to 0 led_o
 
 # Create clk_wiz
 cell xilinx.com:ip:clk_wiz pll_0 {
@@ -187,8 +225,8 @@ if {$dsp_source=="OPENSOURCE"} {
 
 # LEDs, using the LSB as a clock lock status
 cell xilinx.com:ip:xlslice:1.0 led_slice {
-    DIN_FROM 6
-    DIN_TO 0
+    DIN_FROM 7
+    DIN_TO 1
     DIN_WIDTH 8
     # DOUT_WIDTH 7 # might not need this
 } {
@@ -203,6 +241,8 @@ cell xilinx.com:ip:xlconcat:2.1 led_concat {
     In1 pll_0/locked
 }
 
+connect_bd_net [get_bd_pins led_concat/dout] [get_bd_ports led_o]
+
 cell xilinx.com:ip:xlconcat:2.1 spi_concat_0 {
     NUM_PORTS 7
 } {
@@ -215,11 +255,7 @@ cell xilinx.com:ip:xlconcat:2.1 spi_concat_0 {
     In6 marga/ocra1_sdoz2_o
 }
 
-# Delete input/output port #VN: ?
-delete_bd_objs [get_bd_ports exp_p_tri_io]
-delete_bd_objs [get_bd_ports exp_n_tri_io]
-
-# Create output port for the SPI stuff
+# Expansion connector
 create_bd_port -dir O -from 7 -to 0 exp_p_tri_io
 create_bd_port -dir O -from 7 -to 0 exp_n_tri_io
 create_bd_port -dir I -type data exp_p_tri_io_i

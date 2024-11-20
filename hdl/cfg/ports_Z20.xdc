@@ -220,10 +220,9 @@ set_property PACKAGE_PIN N18 [get_ports {daisy_p_i[1]}]
 set_property PACKAGE_PIN P19 [get_ports {daisy_n_i[1]}]
 
 ### LED
-
 set_property IOSTANDARD LVCMOS33 [get_ports {led_o[*]}]
 set_property SLEW SLOW [get_ports {led_o[*]}]
-set_property DRIVE 8 [get_ports {led_o[*]}]
+set_property DRIVE 4 [get_ports {led_o[*]}]
 
 set_property PACKAGE_PIN F16 [get_ports {led_o[0]}]
 set_property PACKAGE_PIN F17 [get_ports {led_o[1]}]
