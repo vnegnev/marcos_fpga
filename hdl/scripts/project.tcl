@@ -43,7 +43,8 @@ proc cell {cell_vlnv cell_name {cell_props {}} {cell_ports {}}} {
     set local_port [get_bd_intf_pins $cell_name/$local_name]
     set remote_port [get_bd_intf_pins $remote_name]
     if {[llength $local_port] == 1 && [llength $remote_port] == 1} {
-      connect_bd_intf_net $local_port $remote_port
+	connect_bd_intf_net $local_port $remote_port
+	puts "connected $cell_name/$local_name to $remote_name, ignore warning"
       continue
     }
     error "** ERROR: can't connect $cell_name/$local_name and $remote_name"

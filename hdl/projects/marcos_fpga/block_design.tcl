@@ -13,7 +13,7 @@ if {$part_variant=="Z20"} {
     set rx_fifo_length 8192
     set marga_addr_width 18
 } else {
-    puts "Error: Unknown part variant!"
+    puts "** ERROR: Unknown part variant '$part_variant'!"
     exit 1
 }
 
@@ -148,7 +148,7 @@ if {$part_variant=="Z20"} {
 	dac_dat dac_dat_o
     }
 } else {
-    puts "Error: Unknown part variant!"
+    puts "** ERROR: Unknown part variant '$part_variant'!"
     exit 1
 }
 
@@ -304,6 +304,6 @@ if {$part_variant=="Z20"} {
 } elseif {$part_variant=="Z10"} {
     # Not enough pins on Z10 for trigger output
 } else {
-    puts "Error: Unknown part variant!"
+    puts "** ERROR: Unknown part variant '$part_variant'!"
     exit 1
 }
