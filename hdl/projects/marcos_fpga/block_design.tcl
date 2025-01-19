@@ -155,23 +155,41 @@ module tx_0 {
 # hook up the event pulses to something
 #
 
-# the LEDs
-connect_bd_net [get_bd_ports led_o] [get_bd_pins marga/leds_o]
+# LEDs, using the LSB as a clock lock status
+cell xilinx.com:ip:xlslice:1.0 led_slice {
+    DIN_FROM 6
+    DIN_TO 0
+    DIN_WIDTH 8
+    # DOUT_WIDTH 7 # might not need this
+} {
+    Din marga/leds_o
+}
+cell xilinx.com:ip:xlconcat:2.1 led_concat {
+    NUM_PORTS 2
+    IN0_WIDTH 7
+    IN1_WIDTH 1
+} {
+    In0 led_slice/Dout
+    In1 marga/trig_o
+}
 
+connect_bd_net [get_bd_ports led_o] [led_concat/dout]
+
+# SPI
 
 cell xilinx.com:ip:xlconcat:2.1 spi_concat_0 {
     NUM_PORTS 7
 } {
-	In0 marga/ocra1_clk_o
-	In1 marga/ocra1_syncn_o
-	In2 marga/ocra1_ldacn_o
-	In3 marga/ocra1_sdox_o
-	In4	marga/ocra1_sdoy_o
-	In5 marga/ocra1_sdoz_o
-	In6 marga/ocra1_sdoz2_o
+    In0 marga/ocra1_clk_o
+    In1 marga/ocra1_syncn_o
+    In2 marga/ocra1_ldacn_o
+    In3 marga/ocra1_sdox_o
+    In4	marga/ocra1_sdoy_o
+    In5 marga/ocra1_sdoz_o
+    In6 marga/ocra1_sdoz2_o
 }
 
-# Delete input/output port
+# Delete input/output port #VN: ?
 delete_bd_objs [get_bd_ports exp_p_tri_io]
 delete_bd_objs [get_bd_ports exp_n_tri_io]
 
@@ -183,9 +201,10 @@ create_bd_port -dir I -type data exp_p_tri_io_i
 cell xilinx.com:ip:xlconcat:2.1 pio_concat_0 {
     NUM_PORTS 6
 } {
-	In3 marga/fhdo_clk_o
-	In4 marga/fhdo_ssn_o
-	In5 marga/fhdo_sdo_o
+    In2 marga/trig_o
+    In3 marga/fhdo_clk_o
+    In4 marga/fhdo_ssn_o
+    In5 marga/fhdo_sdo_o
 }
 
 cell xilinx.com:ip:xlconcat:2.1 nio_concat_0 {
@@ -193,13 +212,14 @@ cell xilinx.com:ip:xlconcat:2.1 nio_concat_0 {
 }
 connect_bd_net [get_bd_pins nio_concat_0/In0] [get_bd_pins spi_concat_0/dout]
 connect_bd_net [get_bd_pins nio_concat_0/In1] [get_bd_pins marga/tx_gate_o]
+connect_bd_net [get_bd_ports rx_gate_o] [get_bd_pins marga/rx_gate_o]
 
 create_bd_port -dir I -type data trig_i
-create_bd_port -dir O -type data trig_o
+create_bd_port -dir O -type data trig_p_o
 
 # connect to pins
 connect_bd_net [get_bd_pins exp_p_tri_io_i] [get_bd_pins marga/fhdo_sdi_i]
-connect_bd_net [get_bd_ports trig_o] [get_bd_pins marga/rx_gate_o]
+# connect_bd_net [get_bd_ports trig_o] [get_bd_pins marga/rx_gate_o]
 connect_bd_net [get_bd_ports trig_i] [get_bd_pins marga/trig_i]
 connect_bd_net [get_bd_pins exp_n_tri_io] [get_bd_pins nio_concat_0/Dout]
 connect_bd_net [get_bd_pins exp_p_tri_io] [get_bd_pins pio_concat_0/Dout]
