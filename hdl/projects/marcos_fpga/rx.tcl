@@ -16,21 +16,38 @@ cell xilinx.com:ip:axis_subset_converter:1.1 real_selector {
 	aresetn /rst_0/peripheral_aresetn
 }
 
-cell open-mri:user:complex_multiplier:1.0 mult_0 {
-  OPERAND_WIDTH_A 16
-  OPERAND_WIDTH_B 16
-  OPERAND_WIDTH_OUT 32
-  BLOCKING 0
-  STAGES 6
-  ROUND_MODE 1
-} {
-    S_AXIS_A real_selector/M_AXIS
-    S_AXIS_B S_AXIS_DDS_IQ
+if {$dsp_source=="OPENSOURCE"} {
+    cell open-mri:user:complex_multiplier:1.0 mult_0 {
+	OPERAND_WIDTH_A 16
+	OPERAND_WIDTH_B 16
+	OPERAND_WIDTH_OUT 32
+	BLOCKING 0
+	STAGES 6
+	ROUND_MODE 1
+    } {
+	S_AXIS_A real_selector/M_AXIS
+	S_AXIS_B S_AXIS_DDS_IQ
 	aclk /pll_0/clk_out1
 	aresetn rx_aresetn
+    }
+} elseif {$dsp_source=="XILINX"} {
+    cell xilinx.com:ip:cmpy:6.0 mult_0 {
+	FlowControl NonBlocking
+	RoundMode Truncate
+	OutputWidth 32
+	MinimumLatency 6
+	ARESETN false
+    } {
+	S_AXIS_A real_selector/M_AXIS
+	S_AXIS_B S_AXIS_DDS_IQ
+	aclk /pll_0/clk_out1
+    }
+} else {
+    puts "Error: Unknown cmplx multiplier source!"
+    exit 1
 }
 
-# Create axis_broadcaster
+# Create axis_broadcasters
 cell xilinx.com:ip:axis_broadcaster:1.1 comb2iq {
   S_TDATA_NUM_BYTES.VALUE_SRC USER
   M_TDATA_NUM_BYTES.VALUE_SRC USER
@@ -119,8 +136,8 @@ if {$dsp_source=="OPENSOURCE"} {
 	INPUT_DATA_WIDTH 32
 	QUANTIZATION Truncation
 	OUTPUT_DATA_WIDTH 32
-	USE_XTREME_DSP_SLICE true
-	HAS_DOUT_TREADY false
+	USE_XTREME_DSP_SLICE false
+	HAS_DOUT_TREADY true
 	HAS_ARESETN true
     } {
 	S_AXIS_DATA comb2iq/M00_AXIS
@@ -142,8 +159,8 @@ if {$dsp_source=="OPENSOURCE"} {
 	INPUT_DATA_WIDTH 32
 	QUANTIZATION Truncation
 	OUTPUT_DATA_WIDTH 32
-	USE_XTREME_DSP_SLICE true
-	HAS_DOUT_TREADY false
+	USE_XTREME_DSP_SLICE false
+	HAS_DOUT_TREADY true
 	HAS_ARESETN true
     } {
 	S_AXIS_DATA comb2iq/M01_AXIS
