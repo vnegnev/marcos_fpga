@@ -6,7 +6,7 @@
 <Project Version="7" Minor="54" Path="/mnt/arch_ssd/home/vlad/Documents/mri/marcos_fpga/hdl/tmp/marcos_fpga.xpr">
   <DefaultLaunch Dir="$PRUNDIR"/>
   <Configuration>
-    <Option Name="Id" Val="7418f45991fc4e0e97906bb011587e75"/>
+    <Option Name="Id" Val="f95b59e7c0d7463495d3411c91b37907"/>
     <Option Name="Part" Val="xc7z020clg400-1"/>
     <Option Name="CompiledLibDir" Val="$PCACHEDIR/compile_simlib"/>
     <Option Name="CompiledLibDirXSim" Val=""/>
@@ -172,12 +172,12 @@
         <StratHandle Name="Flow_PerfOptimized_high" Flow="Vivado Synthesis 2020"/>
         <Step Id="synth_design">
           <Option Id="ResourceSharing">2</Option>
-          <Option Id="ShregMinSize">5</Option>
+          <Option Id="KeepEquivalentRegisters">1</Option>
           <Option Id="FsmExtraction">1</Option>
           <Option Id="ReTiming">1</Option>
           <Option Id="Directive">7</Option>
-          <Option Id="KeepEquivalentRegisters">1</Option>
           <Option Id="NoCombineLuts">1</Option>
+          <Option Id="ShregMinSize">5</Option>
         </Step>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>

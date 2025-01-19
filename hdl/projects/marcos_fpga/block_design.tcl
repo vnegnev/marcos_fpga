@@ -86,8 +86,8 @@ cell xilinx.com:ip:xlconcat:2.1 ext_clk_n_concat {
     In3 util_ds_buf_3/OBUF_DS_N
 }
 
-connect_bd_net [get_bd_ports ext_clk_p_o] [ext_clk_p_concat/dout]
-connect_bd_net [get_bd_ports ext_clk_n_o] [ext_clk_n_concat/dout]
+connect_bd_net [get_bd_ports ext_clk_p_o] [get_bd_pins ext_clk_p_concat/dout]
+connect_bd_net [get_bd_ports ext_clk_n_o] [get_bd_pins ext_clk_n_concat/dout]
 
 # Create processing_system7
 cell xilinx.com:ip:processing_system7 ps_0 {
@@ -232,11 +232,12 @@ if {$dsp_source=="OPENSOURCE"} {
 
 
 # LEDs, using the LSB as a clock lock status
+#
+# maybe add DOUT_WIDTH 7 - might not need this
 cell xilinx.com:ip:xlslice:1.0 led_slice {
     DIN_FROM 6
     DIN_TO 0
     DIN_WIDTH 8
-    # DOUT_WIDTH 7 # might not need this
 } {
     Din marga/leds_o
 }
@@ -249,9 +250,9 @@ cell xilinx.com:ip:xlconcat:2.1 led_concat {
     In1 pll_0/locked
 }
 
-connect_bd_net [get_bd_ports led_o] [led_concat/dout]
+connect_bd_net [get_bd_ports led_o] [get_bd_pins led_concat/dout]
 
-
+# Expansion header
 cell xilinx.com:ip:xlconcat:2.1 spi_concat_0 {
     NUM_PORTS 7
 } {
@@ -263,18 +264,6 @@ cell xilinx.com:ip:xlconcat:2.1 spi_concat_0 {
     In5 marga/ocra1_sdoz_o
     In6 marga/ocra1_sdoz2_o
 }
-
-# Delete input/output port
-#
-# VN TODO currently they're incorrectly defined in ports_Z20.tcl, not sure why -
-# should just delete from there
-delete_bd_objs [get_bd_ports exp_p_tri_io]
-delete_bd_objs [get_bd_ports exp_n_tri_io]
-
-# Create ports for expansion header, including SPI, gates + trig
-create_bd_port -dir O -from 6 -to 0 exp_p_tri_io
-create_bd_port -dir I -type data exp_p_tri_io_i
-create_bd_port -dir O -from 7 -to 0 exp_n_tri_io
 
 cell xilinx.com:ip:xlconcat:2.1 pio_concat_0 {
     NUM_PORTS 6
@@ -293,14 +282,12 @@ cell xilinx.com:ip:xlconcat:2.1 nio_concat_0 {
 }
 
 # connect to pins
-connect_bd_net [get_bd_pins exp_p_tri_io_i] [get_bd_pins marga/fhdo_sdi_i]
+connect_bd_net [get_bd_pins exp_p_tri_i] [get_bd_pins marga/fhdo_sdi_i]
 connect_bd_net [get_bd_pins exp_n_tri_io] [get_bd_pins nio_concat_0/Dout]
 connect_bd_net [get_bd_pins exp_p_tri_io] [get_bd_pins pio_concat_0/Dout]
 
 if {$part_variant=="Z20"} {
-    create_bd_port -dir I -type data trig_i
     connect_bd_net [get_bd_ports trig_i] [get_bd_pins marga/trig_i]
-    # 'RX gate' MaRGA output is connected to trig_o port, trig_o MaRGA output is disconnected
     connect_bd_net [get_bd_ports rx_gate_o] [get_bd_pins marga/rx_gate_o]
 } elseif {$part_variant=="Z10"} {
     # Not enough pins on Z10 for trigger input; set MaRGA trigger input
