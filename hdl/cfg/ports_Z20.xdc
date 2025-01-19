@@ -188,13 +188,13 @@ set_property PACKAGE_PIN L15 [get_ports {exp_n_tri_io[4]}]
 set_property PACKAGE_PIN L16 [get_ports {exp_p_tri_io[5]}]
 set_property PACKAGE_PIN L17 [get_ports {exp_n_tri_io[5]}]
 # set_property PACKAGE_PIN K16 [get_ports {exp_p_tri_io[6]}]
+# actually exp_p_tri_io[6] is pin [7] on the pinout; wrote it as [6]
+# to keep the bus intact with the true exp_p_tri_io[6] pin used as an
+# input (i.e. exp_p_tri_io_i)
+set_property PACKAGE_PIN M14 [get_ports {exp_p_tri_io[6]}]
 set_property PACKAGE_PIN J16 [get_ports {exp_n_tri_io[6]}]
 set_property PACKAGE_PIN M15 [get_ports {exp_n_tri_io[7]}]
 
-# actually exp_pi_tri_io[6] is pin [7] on the pinout; wrote it as [6]
-# to keep the bus intact with the true exp_p_tri_io[6] pin used as an
-# input
-set_property PACKAGE_PIN M14 [get_ports {exp_p_tri_io[6]}]
 
 # GPA-FHDO ADC input
 set_property IOSTANDARD LVCMOS33 [get_ports exp_p_tri_i]
@@ -210,29 +210,32 @@ set_property PACKAGE_PIN Y8 [get_ports trig_i]
 
 ### SATA connector
 
-set_property IOSTANDARD DIFF_HSTL_I_18 [get_ports {ext_clk_p_o[0]}]
-set_property IOSTANDARD DIFF_HSTL_I_18 [get_ports {ext_clk_n_o[0]}]
+set_property IOSTANDARD DIFF_HSTL_I_18 [get_ports {ext_clk_p_o[*]}]
+set_property IOSTANDARD DIFF_HSTL_I_18 [get_ports {ext_clk_n_o[*]}]
 
+## First two pairs on SATA connector 1 (S1 on schematic)
+# 'out' wiring
 set_property PACKAGE_PIN T12 [get_ports {ext_clk_p_o[0]}]
 set_property PACKAGE_PIN U12 [get_ports {ext_clk_n_o[0]}]
 
-#set_property IOSTANDARD DIFF_HSTL_I_18 [get_ports daisy_p_o[*]]
-#set_property IOSTANDARD DIFF_HSTL_I_18 [get_ports daisy_n_o[*]]
+# 'in' wiring
+set_property PACKAGE_PIN U14 [get_ports {ext_clk_p_o[1]}]
+set_property PACKAGE_PIN U15 [get_ports {ext_clk_n_o[1]}]
+
+## Second two pairs on SATA connector 2 (S2 on schematic)
+# 'out' wiring
+set_property PACKAGE_PIN P14 [get_ports {ext_clk_p_o[2]}]
+set_property PACKAGE_PIN R14 [get_ports {ext_clk_n_o[2]}]
+
+# 'in' wiring
+set_property PACKAGE_PIN N18 [get_ports {ext_clk_p_o[3]}]
+set_property PACKAGE_PIN P19 [get_ports {ext_clk_n_o[3]}]
 
 ## TODO check and adjust voltage, drive strength + slew rate
-set_property IOSTANDARD LVCMOS18 [get_ports trig_p_o]
-set_property IOSTANDARD LVCMOS18 [get_ports trig_n_o]
-set_property PACKAGE_PIN U14 [get_ports {trig_p_o}]
-set_property PACKAGE_PIN U15 [get_ports {trig_n_o}]
-
-set_property IOSTANDARD DIFF_HSTL_I_18 [get_ports daisy_p_i[*]]
-set_property IOSTANDARD DIFF_HSTL_I_18 [get_ports daisy_n_i[*]]
-
-set_property PACKAGE_PIN P14 [get_ports {daisy_p_i[0]}]
-set_property PACKAGE_PIN R14 [get_ports {daisy_n_i[0]}]
-
-set_property PACKAGE_PIN N18 [get_ports {daisy_p_i[1]}]
-set_property PACKAGE_PIN P19 [get_ports {daisy_n_i[1]}]
+# set_property IOSTANDARD LVCMOS18 [get_ports trig_p_o]
+# set_property IOSTANDARD LVCMOS18 [get_ports trig_n_o]
+# set_property PACKAGE_PIN U14 [get_ports {trig_p_o}]
+# set_property PACKAGE_PIN U15 [get_ports {trig_n_o}]
 
 ### LED
 
@@ -248,4 +251,3 @@ set_property PACKAGE_PIN K14 [get_ports {led_o[4]}]
 set_property PACKAGE_PIN G14 [get_ports {led_o[5]}]
 set_property PACKAGE_PIN J15 [get_ports {led_o[6]}]
 set_property PACKAGE_PIN J14 [get_ports {led_o[7]}]
-

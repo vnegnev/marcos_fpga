@@ -40,6 +40,55 @@ cell xilinx.com:ip:clk_wiz pll_0 {
     clk_in1_n adc_clk_n_i
 }
 
+## Clock forwarding
+cell xilinx.com:ip:oddr:1.0 oddr_0 { } { clk_in pll_0/clk_out1 }
+cell xilinx.com:ip:oddr:1.0 oddr_1 { } { clk_in pll_0/clk_out1 }
+cell xilinx.com:ip:oddr:1.0 oddr_2 { } { clk_in pll_0/clk_out1 }
+cell xilinx.com:ip:oddr:1.0 oddr_3 { } { clk_in pll_0/clk_out1 }
+
+# TODO Can probably just make this buffer 4-port, and avoid concats later
+cell xilinx.com:ip:util_ds_buf:2.1 util_ds_buf_0 {
+    C_BUF_TYPE OBUFDS
+} {
+    OBUF_IN oddr_0/clk_out
+}
+cell xilinx.com:ip:util_ds_buf:2.1 util_ds_buf_1 {
+    C_BUF_TYPE OBUFDS
+} {
+    OBUF_IN oddr_1/clk_out
+}
+cell xilinx.com:ip:util_ds_buf:2.1 util_ds_buf_2 {
+    C_BUF_TYPE OBUFDS
+} {
+    OBUF_IN oddr_2/clk_out
+}
+cell xilinx.com:ip:util_ds_buf:2.1 util_ds_buf_3 {
+    C_BUF_TYPE OBUFDS
+} {
+    OBUF_IN oddr_3/clk_out
+}
+
+cell xilinx.com:ip:xlconcat:2.1 ext_clk_p_concat {
+    NUM_PORTS 4
+} {
+    In0 util_ds_buf_0/OBUF_DS_P
+    In1 util_ds_buf_1/OBUF_DS_P
+    In2 util_ds_buf_2/OBUF_DS_P
+    In3 util_ds_buf_3/OBUF_DS_P
+}
+
+cell xilinx.com:ip:xlconcat:2.1 ext_clk_n_concat {
+    NUM_PORTS 4
+} {
+    In0 util_ds_buf_0/OBUF_DS_N
+    In1 util_ds_buf_1/OBUF_DS_N
+    In2 util_ds_buf_2/OBUF_DS_N
+    In3 util_ds_buf_3/OBUF_DS_N
+}
+
+connect_bd_net [get_bd_ports ext_clk_p_o] [ext_clk_p_concat/dout]
+connect_bd_net [get_bd_ports ext_clk_n_o] [ext_clk_n_concat/dout]
+
 # Create processing_system7
 cell xilinx.com:ip:processing_system7 ps_0 {
     PCW_IMPORT_BOARD_PRESET cfg/stemlab_sdr.xml
@@ -182,11 +231,25 @@ if {$dsp_source=="OPENSOURCE"} {
 }
 
 
-# hook up the event pulses to something
-#
+# LEDs, using the LSB as a clock lock status
+cell xilinx.com:ip:xlslice:1.0 led_slice {
+    DIN_FROM 6
+    DIN_TO 0
+    DIN_WIDTH 8
+    # DOUT_WIDTH 7 # might not need this
+} {
+    Din marga/leds_o
+}
+cell xilinx.com:ip:xlconcat:2.1 led_concat {
+    NUM_PORTS 2
+    IN0_WIDTH 7
+    IN1_WIDTH 1
+} {
+    In0 led_slice/Dout
+    In1 pll_0/locked
+}
 
-# the LEDs
-connect_bd_net [get_bd_ports led_o] [get_bd_pins marga/leds_o]
+connect_bd_net [get_bd_ports led_o] [led_concat/dout]
 
 
 cell xilinx.com:ip:xlconcat:2.1 spi_concat_0 {
@@ -202,17 +265,21 @@ cell xilinx.com:ip:xlconcat:2.1 spi_concat_0 {
 }
 
 # Delete input/output port
+#
+# VN TODO currently they're incorrectly defined in ports_Z20.tcl, not sure why -
+# should just delete from there
 delete_bd_objs [get_bd_ports exp_p_tri_io]
 delete_bd_objs [get_bd_ports exp_n_tri_io]
 
-# Create output port for the SPI stuff
-create_bd_port -dir O -from 7 -to 0 exp_p_tri_io
-create_bd_port -dir O -from 7 -to 0 exp_n_tri_io
+# Create ports for expansion header, including SPI, gates + trig
+create_bd_port -dir O -from 6 -to 0 exp_p_tri_io
 create_bd_port -dir I -type data exp_p_tri_io_i
+create_bd_port -dir O -from 7 -to 0 exp_n_tri_io
 
 cell xilinx.com:ip:xlconcat:2.1 pio_concat_0 {
     NUM_PORTS 6
 } {
+    In2 marga/trig_o
     In3 marga/fhdo_clk_o
     In4 marga/fhdo_ssn_o
     In5 marga/fhdo_sdo_o
@@ -220,9 +287,10 @@ cell xilinx.com:ip:xlconcat:2.1 pio_concat_0 {
 
 cell xilinx.com:ip:xlconcat:2.1 nio_concat_0 {
     NUM_PORTS 2
+} {
+    In0 spi_concat_0/dout
+    In1 marga/tx_gate_o
 }
-connect_bd_net [get_bd_pins nio_concat_0/In0] [get_bd_pins spi_concat_0/dout]
-connect_bd_net [get_bd_pins nio_concat_0/In1] [get_bd_pins marga/tx_gate_o]
 
 # connect to pins
 connect_bd_net [get_bd_pins exp_p_tri_io_i] [get_bd_pins marga/fhdo_sdi_i]
@@ -231,12 +299,11 @@ connect_bd_net [get_bd_pins exp_p_tri_io] [get_bd_pins pio_concat_0/Dout]
 
 if {$part_variant=="Z20"} {
     create_bd_port -dir I -type data trig_i
-    create_bd_port -dir O -type data trig_o
     connect_bd_net [get_bd_ports trig_i] [get_bd_pins marga/trig_i]
     # 'RX gate' MaRGA output is connected to trig_o port, trig_o MaRGA output is disconnected
-    connect_bd_net [get_bd_ports trig_o] [get_bd_pins marga/rx_gate_o]
+    connect_bd_net [get_bd_ports rx_gate_o] [get_bd_pins marga/rx_gate_o]
 } elseif {$part_variant=="Z10"} {
-    # Not enough pins on Z10 for trigger input/output; set MaRGA trigger input
+    # Not enough pins on Z10 for trigger input; set MaRGA trigger input
     # to a constant
     connect_bd_net [get_bd_pins const_0/dout] [get_bd_pins marga/trig_i]
 } else {

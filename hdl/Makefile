@@ -1,4 +1,4 @@
-# Invoke using e.g. 'make PART_VARIANT=Z20 DSP_SOURCE=OPENSOURCE -j6
+# Invoke using e.g. 'make PART_VARIANT=Z20 DSP_SOURCE=OPENSOURCE'
 #
 # PART_VARIANT can be Z20 for RP-122 and Z10 for RP-125. Default: Z20 - the
 # MaRCoS project does not officially support Z10 although it's feature-complete
@@ -8,8 +8,6 @@
 # CIC cores, or XILINX to use the Xilinx DDS compiler and CIC compiler
 # IPs. Default: OPENSOURCE. Note: open-source cores use more resources on Z10
 # (cause not yet debugged)
-#
-# -jX chooses the number of threads. (optional)
 #
 # Examples
 #
